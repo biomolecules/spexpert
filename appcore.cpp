@@ -627,9 +627,14 @@ void AppCore::onNeslabConnectionFailed()
 bool AppCore::expInitializeStage()
 {
     bool stageNeeded = false;
-    int ii;
-    for (ii = 0; ii < appState()->initWinSpecParams()->cal.size(); ++ii) {
-        if (appState()->initWinSpecParams()->cal.at(ii).autoCal) {
+    if (appState()->initWinSpecParams()->extRan.extendedRange) {
+        for (int ii = 0; ii < appState()->initWinSpecParams()->cal.size(); ++ii) {
+            if (appState()->initWinSpecParams()->cal.at(ii).autoCal) {
+                stageNeeded = true;
+            }
+        }
+    } else {
+        if (appState()->initWinSpecParams()->cal.at(0).autoCal) {
             stageNeeded = true;
         }
     }
