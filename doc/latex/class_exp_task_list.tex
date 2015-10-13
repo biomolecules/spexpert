@@ -1,0 +1,256 @@
+\hypertarget{class_exp_task_list}{}\section{Exp\+Task\+List Class Reference}
+\label{class_exp_task_list}\index{Exp\+Task\+List@{Exp\+Task\+List}}
+
+
+\hyperlink{class_exp_task_list}{Exp\+Task\+List}.  
+
+
+
+
+Inheritance diagram for Exp\+Task\+List\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=142pt]{class_exp_task_list__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{class_exp_task_list_aac7d8753382c988d39d2a3054ed2c7aa}{start} ()
+\begin{DoxyCompactList}\small\item\em This method starts execution of the \hyperlink{class_exp_task}{Exp\+Task} object contained in the \hyperlink{class_exp_task_list}{Exp\+Task\+List}. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}{stop} ()
+\begin{DoxyCompactList}\small\item\em This methods stops execution of the \hyperlink{class_exp_task_list}{Exp\+Task\+List} and current running \hyperlink{class_exp_task}{Exp\+Task} through the emitting the \hyperlink{class_exp_task_list_a445b0e774f24ebcd351ef5121d7f9487}{stop\+Task()} signal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_exp_task_list_a445b0e774f24ebcd351ef5121d7f9487}{}void \hyperlink{class_exp_task_list_a445b0e774f24ebcd351ef5121d7f9487}{stop\+Task} ()\label{class_exp_task_list_a445b0e774f24ebcd351ef5121d7f9487}
+
+\begin{DoxyCompactList}\small\item\em This signal is emited form the \hyperlink{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}{stop()} method and is connected in the \hyperlink{class_exp_task_list_a2aa559b46e0fa585386fdf209ab2f366}{next\+Task()} method to the \hyperlink{class_exp_task_a22f581786f11fa3c7dc52ff90c6b7043}{Exp\+Task\+::stop()} slot of the current running \hyperlink{class_exp_task}{Exp\+Task}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_exp_task_list_a8641c39dd170ede0b12a7f17997db03c}{Exp\+Task\+List} (Q\+Object $\ast$parent=0)
+\begin{DoxyCompactList}\small\item\em Creates \hyperlink{class_exp_task_list}{Exp\+Task\+List} object. \end{DoxyCompactList}\item 
+\hypertarget{class_exp_task_list_ad65ef5ef9a9826428de3ed56c577c40c}{}virtual \hyperlink{class_exp_task_list_ad65ef5ef9a9826428de3ed56c577c40c}{$\sim$\+Exp\+Task\+List} ()\label{class_exp_task_list_ad65ef5ef9a9826428de3ed56c577c40c}
+
+\begin{DoxyCompactList}\small\item\em Destroyes \hyperlink{class_exp_task_list}{Exp\+Task\+List}, deletes all \hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} objects from the task list. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_exp_task_list_a3e582c5e9ce6f23f86de96d885277fd2}{add\+Task} (\hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} tsk)
+\begin{DoxyCompactList}\small\item\em Appends task to the task list. \end{DoxyCompactList}\item 
+bool \hyperlink{class_exp_task_list_ab48c2f2cdc847964481885c15d56b8fd}{running} () const 
+\begin{DoxyCompactList}\small\item\em This method returns true if the \hyperlink{class_exp_task_list}{Exp\+Task\+List} is executing its content. \end{DoxyCompactList}\item 
+bool \hyperlink{class_exp_task_list_a791b0db466c6144af5fbe9e9954aaa9a}{stop\+Status} () const 
+\begin{DoxyCompactList}\small\item\em This method returns true if the \hyperlink{class_exp_task_list}{Exp\+Task\+List} is stopped by the \hyperlink{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}{stop()} method. \end{DoxyCompactList}\item 
+bool \hyperlink{class_exp_task_list_afe0b0c53938d3ee5dcd154306bba39e8}{is\+Empty} () const 
+\begin{DoxyCompactList}\small\item\em This method returns true if \hyperlink{class_exp_task_list}{Exp\+Task\+List} does not contain any \hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item}. \end{DoxyCompactList}\item 
+\hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} \hyperlink{class_exp_task_list_a9a99c3b7f558ec7248019d1323e22256}{get\+Curr\+Task} () const 
+\begin{DoxyCompactList}\small\item\em This method returns the current running task. \end{DoxyCompactList}\item 
+const Q\+List$<$ \hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} $>$ \& \hyperlink{class_exp_task_list_a608f181f27787a3e72c2388cc47ca177}{get\+Tasks} () const 
+\begin{DoxyCompactList}\small\item\em This method returns the reference to the list containing all stored tasks. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Slots}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{class_exp_task_list_afba27c0ec9da9a87cea6a15fc5a2beca}{task\+Finished} ()
+\begin{DoxyCompactList}\small\item\em This method is connected to the \hyperlink{class_exp_task_aeb51d072a7b96f55da3738a8c7733611}{Exp\+Task\+::finished()} signal of the current task and handles repeating of its execution until the intended number of executions is reached. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{class_exp_task_list_adee3f2e0894b5b102b2fcf0cff4ff25a}{task\+List\+Finished} ()
+\begin{DoxyCompactList}\small\item\em This method is executed after the \hyperlink{class_exp_task_list}{Exp\+Task\+List} finishes execution of all contained \hyperlink{class_exp_task}{Exp\+Task} objects. \end{DoxyCompactList}\item 
+\hypertarget{class_exp_task_list_a2aa559b46e0fa585386fdf209ab2f366}{}virtual void \hyperlink{class_exp_task_list_a2aa559b46e0fa585386fdf209ab2f366}{next\+Task} ()\label{class_exp_task_list_a2aa559b46e0fa585386fdf209ab2f366}
+
+\begin{DoxyCompactList}\small\item\em Executes a next \hyperlink{class_exp_task}{Exp\+Task}. The \hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} objects which contain \hyperlink{class_exp_task}{Exp\+Task} objects are saved in \hyperlink{class_exp_task_list_abfeadd157333249e79ee8ff98ba98cf2}{Exp\+Task\+List\+::curr\+Tasks}, where first element is that, which will by next executed. If there is no task in list, \hyperlink{class_exp_task_list_adee3f2e0894b5b102b2fcf0cff4ff25a}{task\+List\+Finished()} method is called. The \hyperlink{class_exp_task}{Exp\+Task}\textquotesingle{}s \hyperlink{class_exp_task_aeb51d072a7b96f55da3738a8c7733611}{Exp\+Task\+::finished()} signal is connected to the \hyperlink{class_exp_task_list_afba27c0ec9da9a87cea6a15fc5a2beca}{task\+Finished()} slot and \hyperlink{class_exp_task_list_a445b0e774f24ebcd351ef5121d7f9487}{stop\+Task()} signal is connected to the \hyperlink{class_exp_task}{Exp\+Task}\textquotesingle{}s \hyperlink{class_exp_task_a22f581786f11fa3c7dc52ff90c6b7043}{Exp\+Task\+::stop()} slot. If the current \hyperlink{class_exp_task}{Exp\+Task} has not \hyperlink{class_exp_task_a1ab988b6d9eb6d61cd1b3ac1a1c42153}{Exp\+Task\+::curr\+Times\+Exec()} greater than zero, the \hyperlink{class_exp_task_list_afba27c0ec9da9a87cea6a15fc5a2beca}{task\+Finished()} method is called. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_exp_task_list_a2c6fef3959dbd632a927ca789f657d05}{}Q\+List$<$ \hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} $>$ \hyperlink{class_exp_task_list_a2c6fef3959dbd632a927ca789f657d05}{tasks}\label{class_exp_task_list_a2c6fef3959dbd632a927ca789f657d05}
+
+\begin{DoxyCompactList}\small\item\em Private variable containing all tasks to be executed. \end{DoxyCompactList}\item 
+\hypertarget{class_exp_task_list_abfeadd157333249e79ee8ff98ba98cf2}{}Q\+List$<$ \hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} $>$ \hyperlink{class_exp_task_list_abfeadd157333249e79ee8ff98ba98cf2}{curr\+Tasks}\label{class_exp_task_list_abfeadd157333249e79ee8ff98ba98cf2}
+
+\begin{DoxyCompactList}\small\item\em Private varibale containing current task list. It do not store tasks which were already executed in current run even though they will be executed in next run of the list. \end{DoxyCompactList}\item 
+\hypertarget{class_exp_task_list_a1f3833f849f349d37a44a69b09b547b6}{}bool \hyperlink{class_exp_task_list_a1f3833f849f349d37a44a69b09b547b6}{bl\+Running}\label{class_exp_task_list_a1f3833f849f349d37a44a69b09b547b6}
+
+\begin{DoxyCompactList}\small\item\em true if \hyperlink{class_exp_task_list}{Exp\+Task\+List} is running \end{DoxyCompactList}\item 
+\hypertarget{class_exp_task_list_aa7bfbd7aece2b214647e15d26b32905b}{}bool \hyperlink{class_exp_task_list_aa7bfbd7aece2b214647e15d26b32905b}{bl\+Stop}\label{class_exp_task_list_aa7bfbd7aece2b214647e15d26b32905b}
+
+\begin{DoxyCompactList}\small\item\em true if \hyperlink{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}{stop()} method is stopping or has stopped the \hyperlink{class_exp_task_list}{Exp\+Task\+List} execution. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{class_exp_task_list}{Exp\+Task\+List}. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_exp_task_list_a8641c39dd170ede0b12a7f17997db03c}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!Exp\+Task\+List@{Exp\+Task\+List}}
+\index{Exp\+Task\+List@{Exp\+Task\+List}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{Exp\+Task\+List}]{\setlength{\rightskip}{0pt plus 5cm}Exp\+Task\+List\+::\+Exp\+Task\+List (
+\begin{DoxyParamCaption}
+\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [explicit]}}\label{class_exp_task_list_a8641c39dd170ede0b12a7f17997db03c}
+
+
+Creates \hyperlink{class_exp_task_list}{Exp\+Task\+List} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & A parent Q\+Objet in Qt\textquotesingle{}s ownership system. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_exp_task_list_a3e582c5e9ce6f23f86de96d885277fd2}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!add\+Task@{add\+Task}}
+\index{add\+Task@{add\+Task}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{add\+Task}]{\setlength{\rightskip}{0pt plus 5cm}void Exp\+Task\+List\+::add\+Task (
+\begin{DoxyParamCaption}
+\item[{{\bf Exp\+Task\+List\+Traits\+::\+Task\+Item}}]{tsk}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_exp_task_list_a3e582c5e9ce6f23f86de96d885277fd2}
+
+
+Appends task to the task list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tsk} & appended task. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \hyperlink{class_wait_task_list_a429d0b45f82a2eef00c5dacffbbc1f70}{Wait\+Task\+List}.
+
+\hypertarget{class_exp_task_list_ab48c2f2cdc847964481885c15d56b8fd}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!running@{running}}
+\index{running@{running}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{running}]{\setlength{\rightskip}{0pt plus 5cm}Exp\+Task\+List\+::running (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{class_exp_task_list_ab48c2f2cdc847964481885c15d56b8fd}
+
+
+This method returns true if the \hyperlink{class_exp_task_list}{Exp\+Task\+List} is executing its content. 
+
+\begin{DoxyReturn}{Returns}
+true if \hyperlink{class_exp_task_list}{Exp\+Task\+List} is running.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{class_exp_task_list_aac7d8753382c988d39d2a3054ed2c7aa}{start()}, \hyperlink{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}{stop()} 
+\end{DoxySeeAlso}
+\hypertarget{class_exp_task_list_a791b0db466c6144af5fbe9e9954aaa9a}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!stop\+Status@{stop\+Status}}
+\index{stop\+Status@{stop\+Status}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{stop\+Status}]{\setlength{\rightskip}{0pt plus 5cm}bool Exp\+Task\+List\+::stop\+Status (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{class_exp_task_list_a791b0db466c6144af5fbe9e9954aaa9a}
+
+
+This method returns true if the \hyperlink{class_exp_task_list}{Exp\+Task\+List} is stopped by the \hyperlink{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}{stop()} method. 
+
+\begin{DoxyReturn}{Returns}
+true if \hyperlink{class_exp_task_list}{Exp\+Task\+List} is stopped. 
+\end{DoxyReturn}
+\hypertarget{class_exp_task_list_afe0b0c53938d3ee5dcd154306bba39e8}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!is\+Empty@{is\+Empty}}
+\index{is\+Empty@{is\+Empty}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{is\+Empty}]{\setlength{\rightskip}{0pt plus 5cm}bool Exp\+Task\+List\+::is\+Empty (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{class_exp_task_list_afe0b0c53938d3ee5dcd154306bba39e8}
+
+
+This method returns true if \hyperlink{class_exp_task_list}{Exp\+Task\+List} does not contain any \hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item}. 
+
+\begin{DoxyReturn}{Returns}
+true if \hyperlink{class_exp_task_list}{Exp\+Task\+List} is empty. 
+\end{DoxyReturn}
+\hypertarget{class_exp_task_list_a9a99c3b7f558ec7248019d1323e22256}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!get\+Curr\+Task@{get\+Curr\+Task}}
+\index{get\+Curr\+Task@{get\+Curr\+Task}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{get\+Curr\+Task}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Exp\+Task\+List\+Traits\+::\+Task\+Item} Exp\+Task\+List\+::get\+Curr\+Task (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\label{class_exp_task_list_a9a99c3b7f558ec7248019d1323e22256}
+
+
+This method returns the current running task. 
+
+\begin{DoxyReturn}{Returns}
+current running task 
+\end{DoxyReturn}
+\hypertarget{class_exp_task_list_a608f181f27787a3e72c2388cc47ca177}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!get\+Tasks@{get\+Tasks}}
+\index{get\+Tasks@{get\+Tasks}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{get\+Tasks}]{\setlength{\rightskip}{0pt plus 5cm}Exp\+Task\+List\+::get\+Tasks (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\label{class_exp_task_list_a608f181f27787a3e72c2388cc47ca177}
+
+
+This method returns the reference to the list containing all stored tasks. 
+
+\begin{DoxyReturn}{Returns}
+list containing all stored tasks. 
+\end{DoxyReturn}
+\hypertarget{class_exp_task_list_aac7d8753382c988d39d2a3054ed2c7aa}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!start@{start}}
+\index{start@{start}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{start}]{\setlength{\rightskip}{0pt plus 5cm}void Exp\+Task\+List\+::start (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [slot]}}\label{class_exp_task_list_aac7d8753382c988d39d2a3054ed2c7aa}
+
+
+This method starts execution of the \hyperlink{class_exp_task}{Exp\+Task} object contained in the \hyperlink{class_exp_task_list}{Exp\+Task\+List}. 
+
+At first, this method controlls if the \hyperlink{class_exp_task_list}{Exp\+Task\+List} is not already running. If yes, it skips the request, it the other case, it sets private variables indicating \hyperlink{class_exp_task_list}{Exp\+Task\+List} state and calls nex\+Task() method.
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}{stop()}, \hyperlink{class_exp_task_list_afba27c0ec9da9a87cea6a15fc5a2beca}{task\+Finished()}, \hyperlink{class_exp_task_list_adee3f2e0894b5b102b2fcf0cff4ff25a}{task\+List\+Finished()} 
+\end{DoxySeeAlso}
+\hypertarget{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!stop@{stop}}
+\index{stop@{stop}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{stop}]{\setlength{\rightskip}{0pt plus 5cm}void Exp\+Task\+List\+::stop (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [slot]}}\label{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}
+
+
+This methods stops execution of the \hyperlink{class_exp_task_list}{Exp\+Task\+List} and current running \hyperlink{class_exp_task}{Exp\+Task} through the emitting the \hyperlink{class_exp_task_list_a445b0e774f24ebcd351ef5121d7f9487}{stop\+Task()} signal. 
+
+After the current running \hyperlink{class_exp_task}{Exp\+Task} is finished, all the contained \hyperlink{class_exp_task}{Exp\+Task} objects are deleted and all the \hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} structs are removed from the list and the \hyperlink{class_exp_task_list_adee3f2e0894b5b102b2fcf0cff4ff25a}{task\+List\+Finished()} method is called, which emits \hyperlink{class_exp_task_a1a766503f6eb22b82c6e31e279b0ea9d}{task\+Failed()} and \hyperlink{class_exp_task_aeb51d072a7b96f55da3738a8c7733611}{finished()} signals. \hypertarget{class_exp_task_list_adee3f2e0894b5b102b2fcf0cff4ff25a}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!task\+List\+Finished@{task\+List\+Finished}}
+\index{task\+List\+Finished@{task\+List\+Finished}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{task\+List\+Finished}]{\setlength{\rightskip}{0pt plus 5cm}void Exp\+Task\+List\+::task\+List\+Finished (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}\label{class_exp_task_list_adee3f2e0894b5b102b2fcf0cff4ff25a}
+
+
+This method is executed after the \hyperlink{class_exp_task_list}{Exp\+Task\+List} finishes execution of all contained \hyperlink{class_exp_task}{Exp\+Task} objects. 
+
+It emits \hyperlink{class_exp_task_a1a766503f6eb22b82c6e31e279b0ea9d}{task\+Failed()} signal if this is a consequence of \hyperlink{class_exp_task_list_ae3542825c792c23c1f2a54b9d63074d1}{stop()} method, while \hyperlink{class_exp_task_list_ab48c2f2cdc847964481885c15d56b8fd}{running()} status is still true. Then it emits \hyperlink{class_exp_task_aeb51d072a7b96f55da3738a8c7733611}{finished()} signal, where the \hyperlink{class_exp_task_list_ab48c2f2cdc847964481885c15d56b8fd}{running()} status is already false. 
+
+Reimplemented in \hyperlink{class_wait_task_list_aa0749dc369379ff737fdf14a89142bd2}{Wait\+Task\+List}.
+
+\hypertarget{class_exp_task_list_afba27c0ec9da9a87cea6a15fc5a2beca}{}\index{Exp\+Task\+List@{Exp\+Task\+List}!task\+Finished@{task\+Finished}}
+\index{task\+Finished@{task\+Finished}!Exp\+Task\+List@{Exp\+Task\+List}}
+\subsubsection[{task\+Finished}]{\setlength{\rightskip}{0pt plus 5cm}void Exp\+Task\+List\+::task\+Finished (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}, {\ttfamily [slot]}}\label{class_exp_task_list_afba27c0ec9da9a87cea6a15fc5a2beca}
+
+
+This method is connected to the \hyperlink{class_exp_task_aeb51d072a7b96f55da3738a8c7733611}{Exp\+Task\+::finished()} signal of the current task and handles repeating of its execution until the intended number of executions is reached. 
+
+At first, the method controlls if the task was stopped by the stop method and if so, it cleans up containing tasks and executes \hyperlink{class_exp_task_list_adee3f2e0894b5b102b2fcf0cff4ff25a}{task\+List\+Finished()}.
+
+Then it decreases \hyperlink{class_exp_task}{Exp\+Task}\textquotesingle{}s execution counter by the \hyperlink{class_exp_task_a4b1e37a956ea18764bb62b8b9ffa52d3}{Exp\+Task\+::once\+Executed()} method and executes it once more if the counter is styl greater than one, else it disconnects the the \hyperlink{class_exp_task_aeb51d072a7b96f55da3738a8c7733611}{Exp\+Task\+::finished()} signal from this method and \hyperlink{class_exp_task_list_a445b0e774f24ebcd351ef5121d7f9487}{Exp\+Task\+List\+::stop\+Task()} signla from \hyperlink{class_exp_task_a22f581786f11fa3c7dc52ff90c6b7043}{Exp\+Task\+::stop()} method. If the task need to be deleted later, it calls \hyperlink{class_exp_task_ac84290f4ee014237657794522350cfea}{Exp\+Task\+::restart\+Times\+Exec()}, else it deletes task and removes it from tasks list. Then it calls \hyperlink{class_exp_task_list_a2aa559b46e0fa585386fdf209ab2f366}{next\+Task()}. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+exptasklist.\+h\item 
+exptasklist.\+cpp\end{DoxyCompactItemize}

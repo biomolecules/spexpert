@@ -1,0 +1,68 @@
+\hypertarget{class_delayed_start}{}\section{Delayed\+Start Class Reference}
+\label{class_delayed_start}\index{Delayed\+Start@{Delayed\+Start}}
+
+
+This class is helper class, which wraps the \hyperlink{class_wait_task}{Wait\+Task} object if it has some \hyperlink{class_wait_task_a3984ae37eae1a984db2f2417df2bfbbf}{Wait\+Task\+::initial\+Delay()} in the Wait\+Worker\+::delayed\+Add\+Wait\+Task() method. Its method is invoked by a Q\+Timer after the initialy delay elapses. The \hyperlink{class_delayed_start_a579d849a61a9f20cb29bc18d5be7611a}{delayed\+Add\+Wait\+Task()} emits \hyperlink{class_delayed_start_ab12e84ab2900082373f556051f260c9c}{add\+Task()} signal, which is connected to the \hyperlink{class_wait_worker_a71dec4dbc5a123f20d0a5a7f707ed5a3}{Wait\+Worker\+::add\+Delayed\+Wait\+Task()} method and then it destroyes itself.  
+
+
+
+
+Inherits Q\+Object.
+
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_delayed_start_a579d849a61a9f20cb29bc18d5be7611a}{}void \hyperlink{class_delayed_start_a579d849a61a9f20cb29bc18d5be7611a}{delayed\+Add\+Wait\+Task} ()\label{class_delayed_start_a579d849a61a9f20cb29bc18d5be7611a}
+
+\begin{DoxyCompactList}\small\item\em This slot is invoked by the Q\+Timer from the \hyperlink{class_wait_worker_adaff9ea88795fa9d902711c1952828cd}{Wait\+Worker\+::add\+Wait\+Task()} method. It emits \hyperlink{class_delayed_start_ab12e84ab2900082373f556051f260c9c}{add\+Task()} signal and deletes the \hyperlink{class_delayed_start}{Delayed\+Start} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_delayed_start_ab12e84ab2900082373f556051f260c9c}{}void \hyperlink{class_delayed_start_ab12e84ab2900082373f556051f260c9c}{add\+Task} (\hyperlink{struct_wait_task_list_traits_1_1_task_item}{Wait\+Task\+List\+Traits\+::\+Task\+Item} wait\+Task\+Item)\label{class_delayed_start_ab12e84ab2900082373f556051f260c9c}
+
+\begin{DoxyCompactList}\small\item\em This signal is emited from the \hyperlink{class_delayed_start_a579d849a61a9f20cb29bc18d5be7611a}{delayed\+Add\+Wait\+Task()} method and connected to the \hyperlink{class_wait_worker_a71dec4dbc5a123f20d0a5a7f707ed5a3}{Wait\+Worker\+::add\+Delayed\+Wait\+Task()} slot. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_delayed_start_a68f9a781f7423106276e4a1f1e169fed}{Delayed\+Start} (const \hyperlink{struct_wait_task_list_traits_1_1_task_item}{Wait\+Task\+List\+Traits\+::\+Task\+Item} \&wait\+Task\+Item, Q\+Object $\ast$parent=0)
+\begin{DoxyCompactList}\small\item\em Constructs the \hyperlink{class_delayed_start}{Delayed\+Start} object. \end{DoxyCompactList}\item 
+\hypertarget{class_delayed_start_aa0e567f544ba762575a7ff045a9864ea}{}\hyperlink{class_delayed_start_aa0e567f544ba762575a7ff045a9864ea}{$\sim$\+Delayed\+Start} ()\label{class_delayed_start_aa0e567f544ba762575a7ff045a9864ea}
+
+\begin{DoxyCompactList}\small\item\em Destroyes \hyperlink{class_delayed_start}{Delayed\+Start} objects. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_delayed_start_ad6297f6dba9b4b767486e7a732d4e238}{}\hyperlink{struct_wait_task_list_traits_1_1_task_item}{Wait\+Task\+List\+Traits\+::\+Task\+Item} \hyperlink{class_delayed_start_ad6297f6dba9b4b767486e7a732d4e238}{wait\+Task\+Item\+\_\+}\label{class_delayed_start_ad6297f6dba9b4b767486e7a732d4e238}
+
+\begin{DoxyCompactList}\small\item\em contained \hyperlink{class_wait_task}{Wait\+Task}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is helper class, which wraps the \hyperlink{class_wait_task}{Wait\+Task} object if it has some \hyperlink{class_wait_task_a3984ae37eae1a984db2f2417df2bfbbf}{Wait\+Task\+::initial\+Delay()} in the Wait\+Worker\+::delayed\+Add\+Wait\+Task() method. Its method is invoked by a Q\+Timer after the initialy delay elapses. The \hyperlink{class_delayed_start_a579d849a61a9f20cb29bc18d5be7611a}{delayed\+Add\+Wait\+Task()} emits \hyperlink{class_delayed_start_ab12e84ab2900082373f556051f260c9c}{add\+Task()} signal, which is connected to the \hyperlink{class_wait_worker_a71dec4dbc5a123f20d0a5a7f707ed5a3}{Wait\+Worker\+::add\+Delayed\+Wait\+Task()} method and then it destroyes itself. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_delayed_start_a68f9a781f7423106276e4a1f1e169fed}{}\index{Delayed\+Start@{Delayed\+Start}!Delayed\+Start@{Delayed\+Start}}
+\index{Delayed\+Start@{Delayed\+Start}!Delayed\+Start@{Delayed\+Start}}
+\subsubsection[{Delayed\+Start}]{\setlength{\rightskip}{0pt plus 5cm}Delayed\+Start\+::\+Delayed\+Start (
+\begin{DoxyParamCaption}
+\item[{const {\bf Wait\+Task\+List\+Traits\+::\+Task\+Item} \&}]{wait\+Task\+Item, }
+\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{class_delayed_start_a68f9a781f7423106276e4a1f1e169fed}
+
+
+Constructs the \hyperlink{class_delayed_start}{Delayed\+Start} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em wait\+Task\+Item} & The \hyperlink{class_wait_task}{Wait\+Task}, which may be delayed. \\
+\hline
+{\em parent} & A parent in the Qt\textquotesingle{}s ownership system. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+waittasklist.\+h\item 
+waittasklist.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,61 @@
+\hypertarget{class_wait_exp_task}{}\section{Wait\+Exp\+Task Class Reference}
+\label{class_wait_exp_task}\index{Wait\+Exp\+Task@{Wait\+Exp\+Task}}
+
+
+This class contains the \hyperlink{class_wait_task}{Wait\+Task} in the \hyperlink{struct_wait_task_list_traits_1_1_task_item}{Wait\+Task\+List\+Traits\+::\+Task\+Item}, which will be submited to the list of tasks which will be waited for, when added to the \hyperlink{class_wait_task_list}{Wait\+Task\+List}. Each \hyperlink{class_wait_task}{Wait\+Task} should be handled by some \hyperlink{class_waiting_task}{Waiting\+Task} to have some effect, so there shouldn\textquotesingle{}t be any \hyperlink{class_wait_exp_task}{Wait\+Exp\+Task} added to the \hyperlink{class_wait_task_list}{Wait\+Task\+List} without \hyperlink{class_waiting_task}{Waiting\+Task} added somewhere after it.  
+
+
+
+
+Inheritance diagram for Wait\+Exp\+Task\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=143pt]{class_wait_exp_task__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_wait_exp_task_a355f9031b6b4cbf0e3b17072fd92e57e}{}virtual void \hyperlink{class_wait_exp_task_a355f9031b6b4cbf0e3b17072fd92e57e}{start} ()\label{class_wait_exp_task_a355f9031b6b4cbf0e3b17072fd92e57e}
+
+\begin{DoxyCompactList}\small\item\em emits \hyperlink{class_wait_exp_task_a0e6b8df7760857ace81f82deb888fb23}{start\+Wait\+Task()} signal, to start waiting for this task and \hyperlink{class_exp_task_aeb51d072a7b96f55da3738a8c7733611}{finished()} signal to finish this task. The waiting for the task is then handled by the \hyperlink{class_waiting_task}{Waiting\+Task}. \end{DoxyCompactList}\item 
+\hypertarget{class_wait_exp_task_a7d34d773042648d601c67a5b2c9ee55d}{}virtual void \hyperlink{class_wait_exp_task_a7d34d773042648d601c67a5b2c9ee55d}{stop} ()\label{class_wait_exp_task_a7d34d773042648d601c67a5b2c9ee55d}
+
+\begin{DoxyCompactList}\small\item\em stops adding of the \hyperlink{class_wait_task}{Wait\+Task} to the \hyperlink{class_wait_worker}{Wait\+Worker}. Do not use it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_wait_exp_task_a0e6b8df7760857ace81f82deb888fb23}{}void \hyperlink{class_wait_exp_task_a0e6b8df7760857ace81f82deb888fb23}{start\+Wait\+Task} (unsigned int id)\label{class_wait_exp_task_a0e6b8df7760857ace81f82deb888fb23}
+
+\begin{DoxyCompactList}\small\item\em This signal is emited from the \hyperlink{class_wait_exp_task_a355f9031b6b4cbf0e3b17072fd92e57e}{start()} method, and in \hyperlink{class_wait_task_list}{Wait\+Task\+List} is connected to the \hyperlink{class_wait_task_list_a802528b32bbcacb201bdd5fcfc4dacf6}{Wait\+Task\+List\+::on\+Start\+Wait\+Task()} which submits contained \hyperlink{class_wait_task}{Wait\+Task} to the \hyperlink{class_wait_worker}{Wait\+Worker}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_wait_exp_task_a15d7409a0fdc6c6da419ad9959c86e71}{}\hyperlink{class_wait_exp_task_a15d7409a0fdc6c6da419ad9959c86e71}{Wait\+Exp\+Task} (const \hyperlink{struct_wait_task_list_traits_1_1_task_item}{Wait\+Task\+List\+Traits\+::\+Task\+Item} \&wait\+Task, Q\+Object $\ast$parent=0)\label{class_wait_exp_task_a15d7409a0fdc6c6da419ad9959c86e71}
+
+\begin{DoxyCompactList}\small\item\em Constructs \hyperlink{class_wait_exp_task}{Wait\+Exp\+Task} object. \end{DoxyCompactList}\item 
+\hypertarget{class_wait_exp_task_a8688827b3a1eccec11bdd5d7002ee288}{}virtual \hyperlink{class_wait_exp_task_a8688827b3a1eccec11bdd5d7002ee288}{$\sim$\+Wait\+Exp\+Task} ()\label{class_wait_exp_task_a8688827b3a1eccec11bdd5d7002ee288}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_wait_exp_task_a8688827b3a1eccec11bdd5d7002ee288}{Wait\+Exp\+Task\+::$\sim$\+Wait\+Exp\+Task}. \end{DoxyCompactList}\item 
+\hypertarget{class_wait_exp_task_a34d831c5c3497c9e315a5323e9e45b02}{}virtual void \hyperlink{class_wait_exp_task_a34d831c5c3497c9e315a5323e9e45b02}{set\+Delayed\+Delete} (bool bl\+Delayed\+Delete)\label{class_wait_exp_task_a34d831c5c3497c9e315a5323e9e45b02}
+
+\begin{DoxyCompactList}\small\item\em Sets delayed destruction of the task also for the contained \hyperlink{class_wait_task}{Wait\+Task}. Viz \hyperlink{class_exp_task_a2049ca37582a4b3250f3fc46ba19fe2a}{Exp\+Task\+::set\+Delayed\+Delete()} \end{DoxyCompactList}\item 
+\hypertarget{class_wait_exp_task_ae9c89cd3011fe082c884fef466317291}{}\hyperlink{struct_wait_task_list_traits_1_1_task_item}{Wait\+Task\+List\+Traits\+::\+Task\+Item} \hyperlink{class_wait_exp_task_ae9c89cd3011fe082c884fef466317291}{get\+Wait\+Task\+Item} ()\label{class_wait_exp_task_ae9c89cd3011fe082c884fef466317291}
+
+\begin{DoxyCompactList}\small\item\em Returns contained \hyperlink{struct_wait_task_list_traits_1_1_task_item}{Wait\+Task\+List\+Traits\+::\+Task\+Item}. This method is used in \hyperlink{class_wait_task_list_a429d0b45f82a2eef00c5dacffbbc1f70}{Wait\+Task\+List\+::add\+Task()}, where the contained \hyperlink{class_wait_task}{Wait\+Task} obtaines its id. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_wait_exp_task_a10b668341c30600b359980f4ebecb99f}{}\hyperlink{struct_wait_task_list_traits_1_1_task_item}{Wait\+Task\+List\+Traits\+::\+Task\+Item} \hyperlink{class_wait_exp_task_a10b668341c30600b359980f4ebecb99f}{wait\+Task\+Item}\label{class_wait_exp_task_a10b668341c30600b359980f4ebecb99f}
+
+\begin{DoxyCompactList}\small\item\em contained Wait\+Task\+Item \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class contains the \hyperlink{class_wait_task}{Wait\+Task} in the \hyperlink{struct_wait_task_list_traits_1_1_task_item}{Wait\+Task\+List\+Traits\+::\+Task\+Item}, which will be submited to the list of tasks which will be waited for, when added to the \hyperlink{class_wait_task_list}{Wait\+Task\+List}. Each \hyperlink{class_wait_task}{Wait\+Task} should be handled by some \hyperlink{class_waiting_task}{Waiting\+Task} to have some effect, so there shouldn\textquotesingle{}t be any \hyperlink{class_wait_exp_task}{Wait\+Exp\+Task} added to the \hyperlink{class_wait_task_list}{Wait\+Task\+List} without \hyperlink{class_waiting_task}{Waiting\+Task} added somewhere after it. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+waittasklist.\+h\item 
+waittasklist.\+cpp\end{DoxyCompactItemize}

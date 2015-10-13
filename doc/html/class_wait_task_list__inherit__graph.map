@@ -1,0 +1,4 @@
+<map id="WaitTaskList" name="WaitTaskList">
+<area shape="rect" id="node2" href="$class_exp_task_list.html" title="ExpTaskList. " alt="" coords="7,77,87,101"/>
+<area shape="rect" id="node3" href="$class_exp_task.html" title="Abstract class, which forms the base for tasks usable with ExpTaskList and WaitTaskList. " alt="" coords="15,5,78,29"/>
+</map>

@@ -1,0 +1,134 @@
+\hypertarget{class_wait_fork_join_task}{}\section{Wait\+Fork\+Join\+Task Class Reference}
+\label{class_wait_fork_join_task}\index{Wait\+Fork\+Join\+Task@{Wait\+Fork\+Join\+Task}}
+
+
+\hyperlink{class_wait_fork_join_task}{Wait\+Fork\+Join\+Task}.  
+
+
+
+
+Inheritance diagram for Wait\+Fork\+Join\+Task\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=160pt]{class_wait_fork_join_task__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_wait_fork_join_task_a607278e5b945c7a1338035637e3bef3d}{}virtual void \hyperlink{class_wait_fork_join_task_a607278e5b945c7a1338035637e3bef3d}{start} ()\label{class_wait_fork_join_task_a607278e5b945c7a1338035637e3bef3d}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_wait_fork_join_task_a607278e5b945c7a1338035637e3bef3d}{Wait\+Fork\+Join\+Task\+::start}. \end{DoxyCompactList}\item 
+\hypertarget{class_wait_fork_join_task_af6ecec14ec65f3a88c11220d8161f5b4}{}virtual void \hyperlink{class_wait_fork_join_task_af6ecec14ec65f3a88c11220d8161f5b4}{stop} ()\label{class_wait_fork_join_task_af6ecec14ec65f3a88c11220d8161f5b4}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_wait_fork_join_task_af6ecec14ec65f3a88c11220d8161f5b4}{Wait\+Fork\+Join\+Task\+::stop}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_wait_fork_join_task_af7cf35f4dae1596cf11da45773c5505d}{Wait\+Fork\+Join\+Task} (unsigned int threads\+N=2, Q\+Object $\ast$parent=0)
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_wait_fork_join_task_af7cf35f4dae1596cf11da45773c5505d}{Wait\+Fork\+Join\+Task\+::\+Wait\+Fork\+Join\+Task}. \end{DoxyCompactList}\item 
+\hypertarget{class_wait_fork_join_task_acedd04001f8f8abc11b9b503f6f60b3f}{}virtual \hyperlink{class_wait_fork_join_task_acedd04001f8f8abc11b9b503f6f60b3f}{$\sim$\+Wait\+Fork\+Join\+Task} ()\label{class_wait_fork_join_task_acedd04001f8f8abc11b9b503f6f60b3f}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_wait_fork_join_task_acedd04001f8f8abc11b9b503f6f60b3f}{Wait\+Fork\+Join\+Task\+::$\sim$\+Wait\+Fork\+Join\+Task}. \end{DoxyCompactList}\item 
+void \hyperlink{class_wait_fork_join_task_ad7a5785f883690aee04d45cbc7788681}{add\+Task} (\hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} tsk, unsigned int threadno)
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_wait_fork_join_task_ad7a5785f883690aee04d45cbc7788681}{Wait\+Fork\+Join\+Task\+::add\+Task}. \end{DoxyCompactList}\item 
+\hypertarget{class_wait_fork_join_task_a97f799474685f172b70ee51445b2e654}{}unsigned int \hyperlink{class_wait_fork_join_task_a97f799474685f172b70ee51445b2e654}{get\+Threads\+N} () const \label{class_wait_fork_join_task_a97f799474685f172b70ee51445b2e654}
+
+\begin{DoxyCompactList}\small\item\em get\+Threads\+N \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const Q\+List$<$ \hyperlink{struct_exp_task_list_traits_1_1_task_item}{Exp\+Task\+List\+Traits\+::\+Task\+Item} $>$ \& \hyperlink{class_wait_fork_join_task_a4223b84b25d8c6a8932cd2036a3a8d24}{get\+Tasks} (unsigned int threadno) const 
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_wait_fork_join_task_a4223b84b25d8c6a8932cd2036a3a8d24}{Wait\+Fork\+Join\+Task\+::get\+Tasks}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_wait_fork_join_task_aa1c97906b084eb05733474c13749236e}{}Q\+Mutex $\ast$ \hyperlink{class_wait_fork_join_task_aa1c97906b084eb05733474c13749236e}{mutex}\label{class_wait_fork_join_task_aa1c97906b084eb05733474c13749236e}
+
+\begin{DoxyCompactList}\small\item\em mutex \end{DoxyCompactList}\item 
+\hypertarget{class_wait_fork_join_task_a1643003d17425a30eda43459e1cc26fe}{}Q\+Vector$<$ \hyperlink{class_exp_task_list}{Exp\+Task\+List} $\ast$ $>$ \hyperlink{class_wait_fork_join_task_a1643003d17425a30eda43459e1cc26fe}{exp\+Task\+Lists}\label{class_wait_fork_join_task_a1643003d17425a30eda43459e1cc26fe}
+
+\begin{DoxyCompactList}\small\item\em exp\+Task\+List \end{DoxyCompactList}\item 
+\hypertarget{class_wait_fork_join_task_a1c30fa2a1c1da359ecbff9f30cb58419}{}unsigned int \hyperlink{class_wait_fork_join_task_a1c30fa2a1c1da359ecbff9f30cb58419}{threads\+N\+\_\+}\label{class_wait_fork_join_task_a1c30fa2a1c1da359ecbff9f30cb58419}
+
+\begin{DoxyCompactList}\small\item\em threads\+N \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_wait_fork_join_task_a147f773ea07af65ac2105d1ac1208693}{}class {\bfseries Wait\+Task\+List}\label{class_wait_fork_join_task_a147f773ea07af65ac2105d1ac1208693}
+
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+\hyperlink{class_wait_fork_join_task}{Wait\+Fork\+Join\+Task}. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_wait_fork_join_task_af7cf35f4dae1596cf11da45773c5505d}{}\index{Wait\+Fork\+Join\+Task@{Wait\+Fork\+Join\+Task}!Wait\+Fork\+Join\+Task@{Wait\+Fork\+Join\+Task}}
+\index{Wait\+Fork\+Join\+Task@{Wait\+Fork\+Join\+Task}!Wait\+Fork\+Join\+Task@{Wait\+Fork\+Join\+Task}}
+\subsubsection[{Wait\+Fork\+Join\+Task}]{\setlength{\rightskip}{0pt plus 5cm}Wait\+Fork\+Join\+Task\+::\+Wait\+Fork\+Join\+Task (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{threads\+N = {\ttfamily 2}, }
+\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [explicit]}}\label{class_wait_fork_join_task_af7cf35f4dae1596cf11da45773c5505d}
+
+
+\hyperlink{class_wait_fork_join_task_af7cf35f4dae1596cf11da45773c5505d}{Wait\+Fork\+Join\+Task\+::\+Wait\+Fork\+Join\+Task}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em threads\+N} & \\
+\hline
+{\em parent} & \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_wait_fork_join_task_ad7a5785f883690aee04d45cbc7788681}{}\index{Wait\+Fork\+Join\+Task@{Wait\+Fork\+Join\+Task}!add\+Task@{add\+Task}}
+\index{add\+Task@{add\+Task}!Wait\+Fork\+Join\+Task@{Wait\+Fork\+Join\+Task}}
+\subsubsection[{add\+Task}]{\setlength{\rightskip}{0pt plus 5cm}void Wait\+Fork\+Join\+Task\+::add\+Task (
+\begin{DoxyParamCaption}
+\item[{{\bf Exp\+Task\+List\+Traits\+::\+Task\+Item}}]{tsk, }
+\item[{unsigned int}]{threadno}
+\end{DoxyParamCaption}
+)}\label{class_wait_fork_join_task_ad7a5785f883690aee04d45cbc7788681}
+
+
+\hyperlink{class_wait_fork_join_task_ad7a5785f883690aee04d45cbc7788681}{Wait\+Fork\+Join\+Task\+::add\+Task}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tsk} & \\
+\hline
+{\em threadno} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_wait_fork_join_task_a4223b84b25d8c6a8932cd2036a3a8d24}{}\index{Wait\+Fork\+Join\+Task@{Wait\+Fork\+Join\+Task}!get\+Tasks@{get\+Tasks}}
+\index{get\+Tasks@{get\+Tasks}!Wait\+Fork\+Join\+Task@{Wait\+Fork\+Join\+Task}}
+\subsubsection[{get\+Tasks}]{\setlength{\rightskip}{0pt plus 5cm}const Q\+List$<$ {\bf Exp\+Task\+List\+Traits\+::\+Task\+Item} $>$ \& Wait\+Fork\+Join\+Task\+::get\+Tasks (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{threadno}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [protected]}}\label{class_wait_fork_join_task_a4223b84b25d8c6a8932cd2036a3a8d24}
+
+
+\hyperlink{class_wait_fork_join_task_a4223b84b25d8c6a8932cd2036a3a8d24}{Wait\+Fork\+Join\+Task\+::get\+Tasks}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em threadno} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+waittasklist.\+h\item 
+waittasklist.\+cpp\end{DoxyCompactItemize}
