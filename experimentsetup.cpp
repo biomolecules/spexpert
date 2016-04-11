@@ -61,6 +61,7 @@ ExpSettingsTab::ExpSettingsTab(AppStateTraits::InitWinSpecParams &params, AppSta
     QLabel *expoLabel = new QLabel(tr("Exposure:"));
     expoSpinBox = new QDoubleSpinBox;
     expoSpinBox->setMinimum(0.01);
+    expoSpinBox->setMaximum(999999.99);
     expoSpinBox->setDecimals(2);
     expoSpinBox->setSingleStep(1.0);
     expoSpinBox->setValue(params_.expe.at(expNumber).expo);
@@ -70,12 +71,14 @@ ExpSettingsTab::ExpSettingsTab(AppStateTraits::InitWinSpecParams &params, AppSta
     QLabel *accLabel = new QLabel(tr("Accumulations:"));
     accSpinBox = new QSpinBox;
     accSpinBox->setMinimum(1);
+    accSpinBox->setMaximum(999999);
     accSpinBox->setValue(params_.expe.at(expNumber).acc);
     accLabel->setBuddy(accSpinBox);
 
     QLabel *frmLabel = new QLabel(tr("Frames:"));
     frmSpinBox = new QSpinBox;
     frmSpinBox->setMinimum(1);
+    frmSpinBox->setMaximum(999999);
     frmSpinBox->setValue(params_.expe.at(expNumber).frm);
     frmLabel->setBuddy(frmSpinBox);
 
@@ -105,6 +108,7 @@ ExpSettingsTab::ExpSettingsTab(AppStateTraits::InitWinSpecParams &params, AppSta
     QLabel *calExpoLabel = new QLabel(tr("Exposure:"));
     calExpoSpinBox = new QDoubleSpinBox;
     calExpoSpinBox->setMinimum(0.01);
+    calExpoSpinBox->setMaximum(999999.99);
     calExpoSpinBox->setDecimals(2);
     calExpoSpinBox->setSingleStep(1.0);
     calExpoSpinBox->setValue(params_.cal.at(expNumber).expo);
@@ -114,12 +118,14 @@ ExpSettingsTab::ExpSettingsTab(AppStateTraits::InitWinSpecParams &params, AppSta
     QLabel *calAccLabel = new QLabel(tr("Accumulations:"));
     calAccSpinBox = new QSpinBox;
     calAccSpinBox->setMinimum(1);
+    calAccSpinBox->setMaximum(999999);
     calAccSpinBox->setValue(params_.cal.at(expNumber).acc);
     calAccLabel->setBuddy(calAccSpinBox);
 
     QLabel *calFrmLabel = new QLabel(tr("Frames:"));
     calFrmSpinBox = new QSpinBox;
     calFrmSpinBox->setMinimum(1);
+    calFrmSpinBox->setMaximum(999999);
     calFrmSpinBox->setValue(params_.cal.at(expNumber).frm);
     calFrmLabel->setBuddy(calFrmSpinBox);
 
