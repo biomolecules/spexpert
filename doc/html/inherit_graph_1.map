@@ -1,8 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_exp_task.html" title="Abstract class, which forms the base for tasks usable with ExpTaskList and WaitTaskList. " alt="" coords="5,77,68,101"/>
-<area shape="rect" id="node2" href="$class_exp_task_list.html" title="ExpTaskList. " alt="" coords="119,5,199,29"/>
-<area shape="rect" id="node4" href="$class_fork_join_task.html" title="This class creates inside multiple ExpTaskList objects and runs each of them in parallel when started..." alt="" coords="116,53,201,77"/>
-<area shape="rect" id="node5" href="$class_wait_exp_task.html" title="This class contains the WaitTask in the WaitTaskListTraits::TaskItem, which will be submited to the l..." alt="" coords="117,101,201,125"/>
-<area shape="rect" id="node6" href="$class_waiting_task.html" title="Handles waiting for all WaitExpTask objects previously added to the WaitTaskList. ..." alt="" coords="119,149,199,173"/>
-<area shape="rect" id="node3" href="$class_wait_task_list.html" title="This class provides interface for executing tasks which waits for some process to be finished..." alt="" coords="249,5,332,29"/>
-</map>
