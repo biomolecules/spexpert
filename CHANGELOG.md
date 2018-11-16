@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - README.md and LICENSE.
 - Possibility to specify mock modules during project configuration.
+- Support for the Velleman K8090 relay card.
 
 
 ### Changed

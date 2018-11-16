@@ -10,6 +10,24 @@ option(MOCK_NESLAB_BATH
     "Build the project with mock Neslab bath. Set it if you don't have or don't want to use real Neslab bath."
     OFF)
 
+option(MAKE_ENUM_FLAGS
+    "Forces internal enum_flags library usage. Otherwise the library is searched if sytem path. You can also specify
+    its location by enum_flags_ROOT_DIR cache variable."
+    OFF)
+
+if (NOT MAKE_ENUM_FLAGS)
+    set(enum_flags_ROOT_DIR "" CACHE PATH "Location hint for enum_flags library search.")
+endif()
+
+option(MAKE_SPRELAY
+    "Forces internal sprelay library usage. Otherwise the library is searched if sytem path. You can also specify
+    its location by sprelay_ROOT_DIR cache variable."
+    OFF)
+
+if (NOT MAKE_SPRELAY)
+    set(sprelay_ROOT_DIR "" CACHE PATH "Location hint for sprelay library search.")
+endif()
+
 set(CPPREFERENCE_TAGS_ROOT_DIR "" CACHE PATH "Location hint for the cppreference doxygen tags search.")
 
 # set some globals
@@ -107,6 +125,29 @@ if (DOXYGEN_FOUND)
     set(qt_widgets_tags "${qt_docs_dir}/qtwidgets/qtwidgets.tags=http://doc.qt.io/qt-5/")
     set(qt_print_support_tags "${qt_docs_dir}/qtprintsupport/qtprintsupport.tags=http://doc.qt.io/qt-5/")
 
+    # enum_flags documentation
+    get_target_property(enum_flags_tags enum_flags_tag_file TAG_FILE)
+    get_target_property(enum_flags_doc_dir enum_flags_tag_file DOC_DIR)
+    if (NOT "${enum_flags_doc_dir}" STREQUAL "")
+        set(enum_flags_tags "${enum_flags_tags}=${enum_flags_doc_dir}")
+    elseif (NOT "${enum_flags_tags}" STREQUAL "")
+        set(enum_flags_tags "${enum_flags_tags}=../../${CMAKE_INSTALL_DATAROOTDIR}/doc/enum_flags/html/")
+    else()
+        set(enum_flags_tags "")
+    endif()
+
+    # sprelay documentation
+    get_target_property(sprelay_tags sprelay_tag_file TAG_FILE)
+    get_target_property(sprelay_doc_dir sprelay_tag_file DOC_DIR)
+    if (NOT "${sprelay_doc_dir}" STREQUAL "")
+        set(sprelay_tags "${sprelay_tags}=${sprelay_doc_dir}")
+    elseif (NOT "${sprelay_tags}" STREQUAL "")
+        set(sprelay_tags "${sprelay_tags}=../../${CMAKE_INSTALL_DATAROOTDIR}/doc/sprelay/html/")
+    else()
+        set(sprelay_tags "")
+    endif()
+    get_filename_component(spexpert_parent_dir ${spexpert_root_source_dir} DIRECTORY)
+
     # configure doxygen
     set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
     set(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
@@ -118,6 +159,8 @@ if (DOXYGEN_FOUND)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating documentation with Doxygen"
         VERBATIM)
+    add_dependencies(doc enum_flags_tag_file)
+    add_dependencies(doc sprelay_tag_file)
     if (NOT cppreference_tag_file)
         add_dependencies(doc get_ccpreference_tags)
     endif()

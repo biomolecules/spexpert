@@ -1,0 +1,6 @@
+[submodule "src/external/biomolecules/sprelay"]
+	path = src/external/biomolecules/sprelay
+	url = https://github.com/biomolecules/sprelay.git
+[submodule "src/external/lumik/enum_flags"]
+	path = src/external/lumik/enum_flags
+	url = https://github.com/lumik/enum_flags.git

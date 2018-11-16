@@ -100,10 +100,15 @@ target_link_libraries(${spexpert_project_name}
     Qt5::Gui
     Qt5::PrintSupport
     Qt5::Widgets
-    Threads::Threads)
+    Threads::Threads
+    biomolecules::sprelay::sprelay_core
+    biomolecules::sprelay::sprelay)
 target_include_directories(${spexpert_project_name} PRIVATE
     ${spexpert_source_dir}/biomolecules/spexpert
     ${spexpert_source_dir}/external)
+if (MAKE_SPRELAY)
+    add_dependencies(${spexpert_project_name} sprelay_build)
+endif()
 set_target_properties(${spexpert_project_name} PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 set_target_properties(${spexpert_project_name} PROPERTIES INSTALL_RPATH "../${CMAKE_INSTALL_LIBDIR}")
 if (MOCK_CALIBRATION_STAGE)
