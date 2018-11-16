@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 3.3.2)
 project(spexpert VERSION 1.0.0 LANGUAGES C CXX)
 
+option(MOCK_CALIBRATION_STAGE
+    "Build the project with mock calibration stage. Set it if you don't have or don't want to use real calibration
+        stage."
+    OFF)
+
+option(MOCK_NESLAB_BATH
+    "Build the project with mock Neslab bath. Set it if you don't have or don't want to use real Neslab bath."
+    OFF)
+
 set(CPPREFERENCE_TAGS_ROOT_DIR "" CACHE PATH "Location hint for the cppreference doxygen tags search.")
 
 # set some globals

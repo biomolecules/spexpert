@@ -72,6 +72,13 @@ cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ^
 -DCMAKE_INSTALL_PREFIX=..
 ```
 
+If you can't or don't want to use real calibration stage or neslab bath configure the project with these
+options:
+```
+cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ^
+-DCMAKE_INSTALL_PREFIX=.. -DMOCK_CALIBRATION_STAGE=ON -DMOCK_NESLAB_BATH=ON
+```
+
 You can skip `CMAKE_INSTALL_PREFIX`. Application is then installed to default destination ("C:\Program Files" on
 Windows, "/usr/local" on Linux).
 

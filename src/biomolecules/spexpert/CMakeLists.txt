@@ -71,8 +71,23 @@ list(APPEND ${spexpert_project_name}_qt_hdr_build "${spexpert_source_dir}/extern
 list(APPEND ${spexpert_project_name}_src_build "${spexpert_source_dir}/external/qcustomplot/qcustomplot.cpp")
 
 # call qt moc
-qt5_wrap_cpp(${spexpert_project_name}_hdr_moc_build ${${spexpert_project_name}_qt_hdr_build})
-qt5_wrap_ui(${spexpert_project_name}_ui_moc_build ${${spexpert_project_name}_ui_build})
+if (MOCK_CALIBRATION_STAGE)
+    set(${spexpert_project_name}_moc_defines ${${spexpert_project_name}_moc_defines}
+        -DSPEXPERT_MOCK_CALIBRATION_STAGE)
+endif()
+if (MOCK_NESLAB_BATH)
+    set(${spexpert_project_name}_moc_defines ${${spexpert_project_name}_moc_defines}
+        -DSPEXPERT_MOCK_NESLAB_BATH)
+endif()
+if (${spexpert_project_name}_moc_defines)
+    qt5_wrap_cpp(${spexpert_project_name}_hdr_moc_build ${${spexpert_project_name}_qt_hdr_build}
+        OPTIONS ${${spexpert_project_name}_moc_defines})
+    qt5_wrap_ui(${spexpert_project_name}_ui_moc_build ${${spexpert_project_name}_ui_build}
+        OPTIONS ${${spexpert_project_name}_moc_defines})
+else()
+    qt5_wrap_cpp(${spexpert_project_name}_hdr_moc_build ${${spexpert_project_name}_qt_hdr_build})
+    qt5_wrap_ui(${spexpert_project_name}_ui_moc_build ${${spexpert_project_name}_ui_build})
+endif()
 
 # create the executable
 add_executable(${spexpert_project_name}
@@ -91,6 +106,12 @@ target_include_directories(${spexpert_project_name} PRIVATE
     ${spexpert_source_dir}/external)
 set_target_properties(${spexpert_project_name} PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 set_target_properties(${spexpert_project_name} PROPERTIES INSTALL_RPATH "../${CMAKE_INSTALL_LIBDIR}")
+if (MOCK_CALIBRATION_STAGE)
+    target_compile_definitions(${spexpert_project_name} PRIVATE SPEXPERT_MOCK_CALIBRATION_STAGE)
+endif()
+if (MOCK_NESLAB_BATH)
+    target_compile_definitions(${spexpert_project_name} PRIVATE SPEXPERT_MOCK_NESLAB_BATH)
+endif()
 
 # attach header files to the library (mainly to display them in IDEs)
 target_sources(${spexpert_project_name} PRIVATE

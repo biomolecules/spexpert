@@ -1,21 +1,19 @@
 #ifndef SERIALPORT_H
 #define SERIALPORT_H
 
-#define VIRTUALSERIALPORT
-
 #include <QObject>
 
 // forward declarations
 class QTimer;
 class QMutex;
 
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
 class VirtualSerialPort;
 class QDateTime;
 #include <random>
-#else // VIRTUALSERIALPORT
+#else // SPEXPERT_MOCK_NESLAB_BATH
 class QSerialPort;
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH
 
 namespace NeslabTraits
 {
@@ -211,9 +209,9 @@ struct ComPortParams
 class Neslab : public QObject
 {
     Q_OBJECT
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
     friend class VirtualSerialPort;
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH
 
 public:
     explicit Neslab(QObject *parent = 0);
@@ -462,14 +460,14 @@ private:
 
     QMutex * mutex;
 
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
     VirtualSerialPort *serialPort;
-#else // VIRTUALSERIALPORT
+#else // SPEXPERT_MOCK_NESLAB_BATH
     QSerialPort *serialPort;
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH
 };
 
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
 
 class VirtualSerialPort : public QObject
 {
@@ -656,6 +654,6 @@ private:
 
     static std::default_random_engine engine;
 };
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH
 
 #endif // SERIALPORT_H

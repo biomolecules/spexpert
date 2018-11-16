@@ -1,17 +1,15 @@
 #ifndef STAGECONTROL_H
 #define STAGECONTROL_H
 
-#define VIRTUALSTAGECONTROL
-
 #include <QObject>
 
 // forwar declarations
 class QString;
 class QMutex;
-#ifdef VIRTUALSTAGECONTROL
+#ifdef SPEXPERT_MOCK_CALIBRATION_STAGE
 class VirtualStageControl;
 
-#else // VIRTUALSTAGECONTROL
+#else // SPEXPERT_MOCK_CALIBRATION_STAGE
 namespace USMCVB_COM
 {
 class USMCVB_COM;
@@ -119,11 +117,11 @@ signals:
 
 private:
 
-#ifndef VIRTUALSTAGECONTROL
+#ifndef SPEXPERT_MOCK_CALIBRATION_STAGE
     USMCVB_COM::USMCVB_COM * usmcvb;
-#else // VIRTUALSTAGECONTROL
+#else // SPEXPERT_MOCK_CALIBRATION_STAGE
     VirtualStageControl * usmcvb;
-#endif // VIRTUALSTAGECONTROL
+#endif // SPEXPERT_MOCK_CALIBRATION_STAGE
 
     bool blConnected_;
     bool blInitialized_;
@@ -141,7 +139,7 @@ private:
 };
 
 // usmcvb controller simulation
-#ifdef VIRTUALSTAGECONTROL
+#ifdef SPEXPERT_MOCK_CALIBRATION_STAGE
 
 #include <QObject>
 
@@ -188,6 +186,6 @@ private:
     QTimer * timer_;
 };
 
-#endif // VIRTUALSTAGECONTROL
+#endif // SPEXPERT_MOCK_CALIBRATION_STAGE
 
 #endif // STAGECONTROL_H

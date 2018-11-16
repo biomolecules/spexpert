@@ -26,14 +26,14 @@
 
 #include "neslab.h"
 
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
 #include <QDateTime>
 #include <ctime>	// na seedovani generatoru nahodnych cisel
 #include <QDebug>
-#else  // VIRTUALSERIALPORT
+#else  // SPEXPERT_MOCK_NESLAB_BATH
 #include <QSerialPort>
 #include <QSerialPortInfo>
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH
 
 #include <QStringBuilder>
 
@@ -46,7 +46,7 @@
 
     \defgroup macros Preprocessor macros
 
-    \def VIRTUALSERIALPORT
+    \def SPEXPERT_MOCK_NESLAB_BATH
     \ingroup macros
     \brief This macro have to be defined before the neslab.h is included or at
     the top of neslab.h file to use VirtualSerialPort insted of QSerialPort
@@ -486,7 +486,7 @@ using namespace NeslabTraits;
     blocking way for the signal that new data on the serial port is available.
 
     It can also run without any serial port using VirtualSerialPort instead of
-    QSerialPort class. Define the ::VIRTUALSERIALPORT preprocessor macro before
+    QSerialPort class. Define the ::SPEXPERT_MOCK_NESLAB_BATH preprocessor macro before
     the neslab.h is included or at the top of the neslab.h
 
     The commands inside the class have all their own priority. The most
@@ -802,13 +802,13 @@ Neslab::Neslab(QObject *parent) :
     connect(this, &Neslab::connectNeslabInThread, this, &Neslab::onConnectNeslabInThread);
 
     // serial port initialisation
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
     serialPort = new VirtualSerialPort(this);
     connect(serialPort, &VirtualSerialPort::readyRead, this, &Neslab::onReadyData);
-#else // VIRTUALSERIALPORT
+#else // SPEXPERT_MOCK_NESLAB_BATH
     serialPort = new QSerialPort(this);
     connect(serialPort, &QSerialPort::readyRead, this, &Neslab::onReadyData);
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH
 }
 
 /*!
@@ -846,7 +846,7 @@ void Neslab::setComPortName(const QString &name)
 QList<ComPortParams> Neslab::availablePorts()
 {
     QList<ComPortParams> comPortParamsList;
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
     // random number generation, to simulate different port states
     std::default_random_engine engine;
     engine.seed(time(0));
@@ -873,7 +873,7 @@ QList<ComPortParams> Neslab::availablePorts()
         comPortParams.manufacturer = "VirtualSerialPort";
         comPortParamsList.append(comPortParams);
     }
-#else // VIRTUALSERIALPORT
+#else // SPEXPERT_MOCK_NESLAB_BATH
     foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
         ComPortParams comPortParams;
         comPortParams.portName = info.portName();
@@ -881,7 +881,7 @@ QList<ComPortParams> Neslab::availablePorts()
         comPortParams.manufacturer = info.manufacturer();
         comPortParamsList.append(comPortParams);
     }
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH
     return comPortParamsList;
 }
 
@@ -2119,7 +2119,7 @@ void Neslab::onStartCmdTimer()
 void Neslab::onConnectNeslabInThread()
 {
     if (!serialPort->isOpen()) {
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
         serialPort->setPortName(comPortName_);
         serialPort->setBaudRate(VirtualSerialPort::Baud9600);
         serialPort->setDataBits(VirtualSerialPort::Data8);
@@ -2130,7 +2130,7 @@ void Neslab::onConnectNeslabInThread()
             emit portOpeningFailed();
             return;
         }
-#else // VIRTUALSERIALPORT
+#else // SPEXPERT_MOCK_NESLAB_BATH
         serialPort->setPortName(comPortName_);
         serialPort->setBaudRate(QSerialPort::Baud9600);
         serialPort->setDataBits(QSerialPort::Data8);
@@ -2141,7 +2141,7 @@ void Neslab::onConnectNeslabInThread()
             emit portOpeningFailed();
             return;
         }
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH
     }
     connecting_ = true;
     PowerOnOffParm parm;
@@ -2155,13 +2155,13 @@ void Neslab::onConnectNeslabInThread()
  */
 void Neslab::onSendToSerial(const unsigned char *buffer, int n)
 {
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
     if (!serialPort->isOpen())
         serialPort->open(VirtualSerialPort::ReadWrite);
-#else // VIRTUALSERIALPORT
+#else // SPEXPERT_MOCK_NESLAB_BATH
     if (!serialPort->isOpen())
         serialPort->open(QIODevice::ReadWrite);
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH
     serialPort->write(reinterpret_cast<char*>(const_cast<unsigned char*>(buffer)), n);
     delete[] buffer;
 }
@@ -3753,7 +3753,7 @@ Neslab::~Neslab()
         function.
     \var Neslab::serialPort;
         \brief The pointer to the serial port object used to controll %Neslab
-        thermostated bath. If the VIRTUALSERIALPORT is defined the
+        thermostated bath. If the SPEXPERT_MOCK_NESLAB_BATH is defined the
         VirtualSerialPort class which simulates the connected bath is used.
 */
 
@@ -3790,7 +3790,7 @@ Neslab::MutexManager::~MutexManager()
 }
 
 
-#ifdef VIRTUALSERIALPORT
+#ifdef SPEXPERT_MOCK_NESLAB_BATH
 
 const int VirtualSerialPort::cmdWait = 10;
 const double VirtualSerialPort::speed_ = 1e-3;
@@ -4665,4 +4665,4 @@ VirtualSerialPort::~VirtualSerialPort()
     delete[] cmd_;
 }
 
-#endif // VIRTUALSERIALPORT
+#endif // SPEXPERT_MOCK_NESLAB_BATH

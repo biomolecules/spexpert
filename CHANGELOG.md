@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- README.md and LICENSE
+- README.md and LICENSE.
+- Possibility to specify mock modules during project configuration.
 
 
 ### Changed

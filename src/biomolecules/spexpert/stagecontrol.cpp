@@ -1,8 +1,8 @@
 #include "stagecontrol.h"
 
-#ifndef VIRTUALSTAGECONTROL
+#ifndef SPEXPERT_MOCK_CALIBRATION_STAGE
 #include "usmcvb_com.h"
-#endif // VIRTUALSTAGECONTROL
+#endif // SPEXPERT_MOCK_CALIBRATION_STAGE
 
 #include <QString>
 #include <QMutex>
@@ -11,11 +11,11 @@
 StageControl::StageControl(QObject *parent) :
     QObject(parent)
 {
-#ifndef VIRTUALSTAGECONTROL
+#ifndef SPEXPERT_MOCK_CALIBRATION_STAGE
     usmcvb = new USMCVB_COM::USMCVB_COM;
-#else // VIRTUALSTAGECONTROL
+#else // SPEXPERT_MOCK_CALIBRATION_STAGE
     usmcvb = new VirtualStageControl;
-#endif // VIRTUALSTAGECONTROL
+#endif // SPEXPERT_MOCK_CALIBRATION_STAGE
     blConnected_ = false;
     blInitialized_ = false;
     stageRange_ = defaultStageRange;
@@ -327,7 +327,7 @@ StageControl::~StageControl()
     delete mutex_;
 }
 
-#ifdef VIRTUALSTAGECONTROL
+#ifdef SPEXPERT_MOCK_CALIBRATION_STAGE
 
 #include <QTimer>
 #include <QDateTime>
