@@ -1,7 +1,12 @@
 project(${spexpert_project_name}_src)
 
 # collect files
-set(${spexpert_project_name}_hdr)
+set(${spexpert_project_name}_hdr
+    lockableqvector.h
+    timespan.h
+    usmcvb_com.h
+    winspec.h
+    winspecvb.h)
 set(${spexpert_project_name}_tpp)
 set(${spexpert_project_name}_qt_hdr
     appcore.h
@@ -11,20 +16,15 @@ set(${spexpert_project_name}_qt_hdr
     exptask.h
     exptasklist.h
     exptasks.h
-    lockableqvector.h
     mainwindow.h
     neslab.h
     neslabusmainwidget.h
     plotproxy.h
     stagecontrol.h
     stagesetup.h
-    timespan.h
-    usmcvb_com.h
     waittask.h
     waittasklist.h
-    waittasks.h
-    winspec.h
-    winspecvb.h)
+    waittasks.h)
 set(${spexpert_project_name}_src
     appcore.cpp
     appstate.cpp
