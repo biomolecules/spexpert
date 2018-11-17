@@ -1,9 +1,13 @@
 #include "mainwindow.h"
+
+#include <biomolecules/sprelay/core/k8090.h>
+
 #include "appcore.h"
 #include "appstate.h"
 #include "neslabusmainwidget.h"
 #include "centralwidget.h"
 #include "experimentsetup.h"
+#include "relay_options_widgets.h"
 #include "stagesetup.h"
 #include "stagecontrol.h"
 #include <QCoreApplication>
@@ -16,7 +20,7 @@
 #include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+    QMainWindow(parent), relayControlPanel_{nullptr}
 {
     QSettings settings(QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + ".ini",QSettings::IniFormat);
     settings.beginGroup("MainApp");
@@ -58,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::onStartReadingTemperature);
     connect(appCore, &AppCore::finishReadingTemperature,
             this, &MainWindow::onFinishReadingTemperature);
+    connect(appCore->appState()->k8090(), &biomolecules::sprelay::core::k8090::K8090::connected,
+            this, &MainWindow::onK8090Connected);
 
     setWindowTitle(tr("SpExpert"));
 }
@@ -187,6 +193,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     settings.setValue("calPosRefType", static_cast<int>(stageParams->calRefType));
     settings.setValue("calInitType", static_cast<int>(stageParams->calInitType));
     settings.endGroup();
+
+    settings.beginGroup("relay");
+    settings.setValue("COMPort", k8090ComPortName);
 }
 
 void MainWindow::onLanguageChanged(QAction *action)
@@ -230,6 +239,20 @@ void MainWindow::onNeslabSetupActionTrigered()
     neslabDialogWindow->activateWindow();
 }
 
+void MainWindow::onRelayControlPanelActionTrigered()
+{
+    if (!relayControlPanel_) {
+        relayControlPanel_ =
+            new biomolecules::spexpert::gui::RelayControlPanel(
+                appCore->appState()->k8090(),
+                k8090ComPortName,
+                this);
+    }
+    relayControlPanel_->show();
+    relayControlPanel_->raise();
+    relayControlPanel_->activateWindow();
+}
+
 void MainWindow::onExperimentStarted()
 {
     experimentAction->setEnabled(false);
@@ -240,6 +263,11 @@ void MainWindow::onExperimentFinished()
 {
     experimentAction->setEnabled(true);
     stageSetupAction->setEnabled(true);
+}
+
+void MainWindow::onK8090Connected()
+{
+    k8090ComPortName = appCore->appState()->k8090()->comPortName();
 }
 
 void MainWindow::createActions()
@@ -261,6 +289,10 @@ void MainWindow::createActions()
     neslabSetupAction = new QAction(tr("Nes&lab settings"), this);
     neslabSetupAction->setStatusTip(tr("Open Neslab bath and temperature acquisition settings."));
     connect(neslabSetupAction, &QAction::triggered, this, &MainWindow::onNeslabSetupActionTrigered);
+
+    relayControlPanelAction = new QAction{tr("&Control Panel"), this};
+    relayControlPanelAction->setStatusTip(tr("Relay card control panel."));
+    connect(relayControlPanelAction, &QAction::triggered, this, &MainWindow::onRelayControlPanelActionTrigered);
 }
 
 void MainWindow::createMenus()
@@ -273,6 +305,8 @@ void MainWindow::createMenus()
     setupMenu->addAction(experimentAction);
     setupMenu->addAction(stageSetupAction);
     setupMenu->addAction(neslabSetupAction);
+    QMenu* relayMenu = setupMenu->addMenu(tr("&Relay"));
+    relayMenu->addAction(relayControlPanelAction);
 
     createLanguageMenu();
 }
@@ -601,6 +635,9 @@ void MainWindow::readSettings()
 
     appCore->appState()->setStageParamsToStage();
     settings.endGroup();
+
+    settings.beginGroup("relay");
+    k8090ComPortName = settings.value("COMPort").toString();
 }
 
 MainWindow::~MainWindow()

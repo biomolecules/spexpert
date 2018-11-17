@@ -1,4 +1,7 @@
 #include "appstate.h"
+
+#include <biomolecules/sprelay/core/k8090.h>
+
 #include "winspec.h"
 #include "stagecontrol.h"
 #include "neslabusmainwidget.h"
@@ -16,8 +19,10 @@
 
 #include <QDebug>
 
-AppState::AppState(AppCore *appCore, QObject *parent) :
-    QObject(parent), appCore_(appCore)
+AppState::AppState(AppCore *appCore, QObject *parent)
+  : QObject(parent),
+    appCore_(appCore),
+    k8090_{new biomolecules::sprelay::core::k8090::K8090{this}}
 {
     qDebug() << "Startuji AppState...";
 
@@ -306,6 +311,11 @@ StageControl *AppState::stageControl()
 Neslab *AppState::neslab()
 {
     return neslab_;
+}
+
+biomolecules::sprelay::core::k8090::K8090* AppState::k8090()
+{
+    return k8090_;
 }
 
 MeasurementLog *AppState::measurementLog()

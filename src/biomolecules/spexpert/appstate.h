@@ -2,6 +2,7 @@
 #define APPSTATE_H
 
 #include <QObject>
+
 #include "waittasklist.h"
 #include "timespan.h"
 
@@ -41,6 +42,16 @@ namespace AutoReadT
 struct Settings;
 }
 }
+
+namespace biomolecules {
+namespace sprelay {
+namespace core {
+namespace k8090 {
+class K8090;
+}  // namespace k8090
+}  // namespace core
+}  // namespace sprelay
+}  // namespace biomolecules
 
 //template<typename T>
 //class LockableQVector;
@@ -182,6 +193,7 @@ public:
     StageControl *stageControl();
     Neslab *neslab();
     MeasurementLog *measurementLog();
+    biomolecules::sprelay::core::k8090::K8090* k8090();
     void lastExpParams(double *expo, int *acc, int *frm, QString *fn);
     int lastGrPos();
 
@@ -257,6 +269,7 @@ private:
     StageControl *stageControl_;
     Neslab *neslab_;
     MeasurementLog *measurementLog_;
+    biomolecules::sprelay::core::k8090::K8090* k8090_;
 
     double xSpectrumShift; // shift in xscale between frames, when spectrum is ploted.
     double ySpectrumShift; // shift in yscale between frames, when spectrum is ploted.

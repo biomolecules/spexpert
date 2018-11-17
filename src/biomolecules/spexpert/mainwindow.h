@@ -13,6 +13,13 @@ namespace NeslabusWidgets
 {
 class MainDialogWindow;
 }
+namespace biomolecules {
+namespace spexpert {
+namespace gui {
+class RelayControlPanel;
+}  // namespace gui
+}  // namespace spexpert
+}  // namespace biomolecules
 
 class MainWindow : public QMainWindow
 {
@@ -35,8 +42,10 @@ private slots:
     void onExperimentActionTrigered();
     void onStageSetupActionTrigered();
     void onNeslabSetupActionTrigered();
+    void onRelayControlPanelActionTrigered();
     void onExperimentStarted();
     void onExperimentFinished();
+    void onK8090Connected();
 
 
 private:
@@ -47,6 +56,7 @@ private:
 
     CentralWidget *centralWidget;
     NeslabusWidgets::MainDialogWindow *neslabDialogWindow;
+    biomolecules::spexpert::gui::RelayControlPanel* relayControlPanel_;
     AppCore *appCore;
 
     QAction *exitAction;
@@ -54,6 +64,7 @@ private:
     QAction *experimentAction;
     QAction *stageSetupAction;
     QAction *neslabSetupAction;
+    QAction *relayControlPanelAction;
 
     QActionGroup * langActionGroup;
 
@@ -65,6 +76,7 @@ private:
     QString defaultLanguage;
 
     QString neslabComPortName;
+    QString k8090ComPortName;
 };
 
 #endif // MAINWINDOW_H

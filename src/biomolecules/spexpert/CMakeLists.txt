@@ -20,6 +20,7 @@ set(${spexpert_project_name}_qt_hdr
     neslab.h
     neslabusmainwidget.h
     plotproxy.h
+    relay_options_widgets.h
     stagecontrol.h
     stagesetup.h
     waittask.h
@@ -39,6 +40,7 @@ set(${spexpert_project_name}_src
     neslab.cpp
     neslabusmainwidget.cpp
     plotproxy.cpp
+    relay_options_widgets.cpp
     stagecontrol.cpp
     stagesetup.cpp
     timespan.cpp
