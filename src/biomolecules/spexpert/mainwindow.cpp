@@ -682,6 +682,7 @@ void MainWindow::readSettings()
 
     settings.beginGroup("relay");
     k8090ComPortName = settings.value("COMPort").toString();
+    appCore->appState()->k8090()->setComPortName(k8090ComPortName);
 
     unsigned int calibrationLampSwitchId = settings.value("calibrationLampSwitchId", 0).toUInt(&ok);
     if (!ok || calibrationLampSwitchId >= 8) {

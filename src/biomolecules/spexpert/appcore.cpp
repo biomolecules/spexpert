@@ -1,5 +1,7 @@
 #include <QStringBuilder>
 
+#include <biomolecules/sprelay/core/k8090.h>
+
 #include "appcore.h"
 #include "centralwidget.h"
 #include "mainwindow.h"
@@ -144,6 +146,8 @@ void AppCore::reportParams()
                             kwinSpecParams->takeOne(&expo, &acc, &frm, fn);
                             qDebug() << "AppCore::startExperiment(): kfilename" << fn;
                             qDebug() << "AppCore::startExperiment(): expo" << expo << ", acc" << acc << ", frm" << frm << ", grPos" << kwinSpecParams->grPos();
+                            qDebug() << "AppCore::startExperiment(): enableLampSwitch "
+                                << params->cal.at(kk).enableLampSwitch;
                         }
                         qDebug() << "AppCore::startExperiment(): T =" << temperatures->takeT();
                     }
@@ -160,6 +164,8 @@ void AppCore::reportParams()
                             kwinSpecParams->takeOne(&expo, &acc, &frm, fn);
                             qDebug() << "AppCore::startExperiment(): kfilename" << fn;
                             qDebug() << "AppCore::startExperiment(): expo" << expo << ", acc" << acc << ", frm" << frm << ", grPos" << kwinSpecParams->grPos();
+                            qDebug() << "AppCore::startExperiment(): enableLampSwitch "
+                                << params->cal.at(kk).enableLampSwitch;
                         }
                         qDebug() << "AppCore::startExperiment(): T =" << temperatures->takeT();
                     }
@@ -179,6 +185,8 @@ void AppCore::reportParams()
                             kwinSpecParams->takeOne(&expo, &acc, &frm, fn);
                             qDebug() << "AppCore::startExperiment(): kfilename" << fn;
                             qDebug() << "AppCore::startExperiment(): expo" << expo << ", acc" << acc << ", frm" << frm << ", grPos" << kwinSpecParams->grPos();
+                            qDebug() << "AppCore::startExperiment(): enableLampSwitch "
+                                << params->cal.at(kk).enableLampSwitch;
                         }
                         qDebug() << "AppCore::startExperiment(): T =" << temperatures->takeT();
                     }
@@ -203,6 +211,8 @@ void AppCore::reportParams()
                     kwinSpecParams->takeOne(&expo, &acc, &frm, fn);
                     qDebug() << "AppCore::startExperiment(): kfilename" << fn;
                     qDebug() << "AppCore::startExperiment(): expo" << expo << ", acc" << acc << ", frm" << frm << ", grPos" << kwinSpecParams->grPos();
+                    qDebug() << "AppCore::startExperiment(): enableLampSwitch "
+                        << params->cal.at(kk).enableLampSwitch;
                 }
             }
         }
@@ -228,6 +238,8 @@ void AppCore::reportParams()
                         kwinSpecParams->takeOne(&expo, &acc, &frm, fn);
                         qDebug() << "AppCore::startExperiment(): kfilename" << fn;
                         qDebug() << "AppCore::startExperiment(): expo" << expo << ", acc" << acc << ", frm" << frm << ", grPos" << kwinSpecParams->grPos();
+                        qDebug() << "AppCore::startExperiment(): enableLampSwitch "
+                            << params->cal.at(kk).enableLampSwitch;
                     }
                     qDebug() << "AppCore::startExperiment(): T =" << temperatures->takeT();
                 }
@@ -244,6 +256,8 @@ void AppCore::reportParams()
                         kwinSpecParams->takeOne(&expo, &acc, &frm, fn);
                         qDebug() << "AppCore::startExperiment(): kfilename" << fn;
                         qDebug() << "AppCore::startExperiment(): expo" << expo << ", acc" << acc << ", frm" << frm << ", grPos" << kwinSpecParams->grPos();
+                        qDebug() << "AppCore::startExperiment(): enableLampSwitch "
+                            << params->cal.at(kk).enableLampSwitch;
                     }
                     qDebug() << "AppCore::startExperiment(): T =" << temperatures->takeT();
                 }
@@ -261,6 +275,8 @@ void AppCore::reportParams()
                         kwinSpecParams->takeOne(&expo, &acc, &frm, fn);
                         qDebug() << "AppCore::startExperiment(): kfilename" << fn;
                         qDebug() << "AppCore::startExperiment(): expo" << expo << ", acc" << acc << ", frm" << frm << ", grPos" << winSpecParams->grPos();
+                        qDebug() << "AppCore::startExperiment(): enableLampSwitch "
+                            << params->cal.at(kk).enableLampSwitch;
                     }
                     qDebug() << "AppCore::startExperiment(): T =" << temperatures->takeT();
                 }
@@ -283,6 +299,8 @@ void AppCore::reportParams()
                 kwinSpecParams->takeOne(&expo, &acc, &frm, fn);
                 qDebug() << "AppCore::startExperiment(): kfilename" << fn;
                 qDebug() << "AppCore::startExperiment(): expo" << expo << ", acc" << acc << ", frm" << frm << ", grPos" << winSpecParams->grPos();
+                qDebug() << "AppCore::startExperiment(): enableLampSwitch "
+                    << params->cal.at(kk).enableLampSwitch;
             }
         }
     }
@@ -298,6 +316,9 @@ void AppCore::startExperiment()
         return;
 
     if (expConnectNeslab())
+        return;
+
+    if (expConnectRelay())
         return;
 
     buildExpParams();
@@ -624,21 +645,35 @@ void AppCore::onNeslabConnectionFailed()
     QMessageBox::critical(centralWidget_, tr("Connection failed!"), tr("Neslab thermostated bath connection failed!"), QMessageBox::Ok);
 }
 
-bool AppCore::expInitializeStage()
+void AppCore::onRelayConnectionFailed()
 {
-    bool stageNeeded = false;
+    disconnect(appState_->k8090(), &biomolecules::sprelay::core::k8090::K8090::connected,
+            this, &AppCore::startExperiment);
+    disconnect(appState_->k8090(), &biomolecules::sprelay::core::k8090::K8090::connectionFailed,
+            this, &AppCore::startExperiment);
+    emit experimentFinished();
+    QMessageBox::critical(centralWidget_, tr("Connection failed!"), tr("Relay connection failed!"), QMessageBox::Ok);
+}
+
+bool AppCore::expAutoCal()
+{
     if (appState()->initWinSpecParams()->extRan.extendedRange) {
         for (int ii = 0; ii < appState()->initWinSpecParams()->cal.size(); ++ii) {
             if (appState()->initWinSpecParams()->cal.at(ii).autoCal) {
-                stageNeeded = true;
+                return true;
             }
         }
     } else {
         if (appState()->initWinSpecParams()->cal.at(0).autoCal) {
-            stageNeeded = true;
+            return true;
         }
     }
-    if (stageNeeded) {
+    return false;
+}
+
+bool AppCore::expInitializeStage()
+{
+    if (expAutoCal()) {
         StageControl *stageControl = appState_->stageControl();
         if (!stageControl->initialized()) {
             int ret = QMessageBox::question(centralWidget_, tr("Initialize stage?"), tr("Even though the stage is not initialized yet, the measurement witch automatic calibration is scheduled. Do you want to initialize it?"),
@@ -687,6 +722,35 @@ bool AppCore::expConnectNeslab()
                 return true;
             } else {
                 appState()->initWinSpecParams()->tExp.tExp = false;
+                emit experimentFinished();
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool AppCore::expConnectRelay()
+{
+    biomolecules::sprelay::core::k8090::K8090* k8090 = appState_->k8090();
+    disconnect(k8090, &biomolecules::sprelay::core::k8090::K8090::connected,
+            this, &AppCore::startExperiment);
+    disconnect(k8090, &biomolecules::sprelay::core::k8090::K8090::connectionFailed,
+            this, &AppCore::startExperiment);
+    if (expAutoCal()) {
+        if (!k8090->isConnected()) {
+            int ret = QMessageBox::question(centralWidget_, tr("Connect Relay?"),
+                tr("Even though the Relay is not connected yet the measurement which requires relay (automatic "
+                   "calibration switch) is scheduled. Do you want to connect it?"),
+                                            QMessageBox::Yes | QMessageBox::No);
+            if (ret == QMessageBox::Yes) {
+                connect(k8090, &biomolecules::sprelay::core::k8090::K8090::connected,
+                        this, &AppCore::startExperiment);
+                connect(k8090, &biomolecules::sprelay::core::k8090::K8090::connectionFailed,
+                        this, &AppCore::onRelayConnectionFailed);
+                k8090->connectK8090();
+                return true;
+            } else {
                 emit experimentFinished();
                 return true;
             }

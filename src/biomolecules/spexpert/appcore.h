@@ -78,10 +78,13 @@ public slots:
     void onReadTSetpoint(double t);
     void onReadExpT(double t);
     void onNeslabConnectionFailed();
+    void onRelayConnectionFailed();
 
 private:
+    bool expAutoCal();
     bool expInitializeStage();
     bool expConnectNeslab();
+    bool expConnectRelay();
 
     void buildExpParams();
 
