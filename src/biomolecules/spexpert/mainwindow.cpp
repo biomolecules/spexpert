@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 #include <biomolecules/sprelay/core/k8090.h>
+#include <biomolecules/sprelay/core/k8090_defines.h>
 
 #include "appcore.h"
 #include "appstate.h"
@@ -8,6 +9,7 @@
 #include "centralwidget.h"
 #include "experimentsetup.h"
 #include "relay_options_widgets.h"
+#include "relay.h"
 #include "stagesetup.h"
 #include "stagecontrol.h"
 #include <QCoreApplication>
@@ -20,7 +22,7 @@
 #include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), relayControlPanel_{nullptr}
+    QMainWindow(parent), relayControlPanel_{nullptr}, relaySettingsDialog_{nullptr}
 {
     QSettings settings(QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + ".ini",QSettings::IniFormat);
     settings.beginGroup("MainApp");
@@ -123,6 +125,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         settings.setValue("expo", cal[ii].expo);
         settings.setValue("acc", cal[ii].acc);
         settings.setValue("frm", cal[ii].frm);
+        settings.setValue("enableLampSwitch", cal[ii].enableLampSwitch);
     }
     settings.endArray();
 
@@ -195,7 +198,28 @@ void MainWindow::closeEvent(QCloseEvent *event)
     settings.endGroup();
 
     settings.beginGroup("relay");
+    biomolecules::spexpert::relay::Settings* relaySettings = appCore->appState()->relaySettings();
     settings.setValue("COMPort", k8090ComPortName);
+    unsigned int relay_id_repr;
+    for (relay_id_repr = 0; relay_id_repr < 8; ++relay_id_repr) {
+        if ((relaySettings->calibration_lamp_switch_id
+            & static_cast<biomolecules::sprelay::core::k8090::RelayID>(1u << relay_id_repr))
+            != biomolecules::sprelay::core::k8090::RelayID::None) {
+            break;
+        }
+    }
+    if (relay_id_repr > 7) {
+        relay_id_repr = 0;
+    }
+    settings.setValue("calibrationLampSwitchId", relay_id_repr);
+    if (relaySettings->calibration_lamp_switch_on) {
+        settings.setValue("calibrationLampSwitchAction",
+            static_cast<unsigned int>(biomolecules::sprelay::core::k8090::CommandID::RelayOn));
+    } else {
+        settings.setValue("calibrationLampSwitchAction",
+            static_cast<unsigned int>(biomolecules::sprelay::core::k8090::CommandID::RelayOff));
+    }
+    settings.endGroup();
 }
 
 void MainWindow::onLanguageChanged(QAction *action)
@@ -253,6 +277,19 @@ void MainWindow::onRelayControlPanelActionTrigered()
     relayControlPanel_->activateWindow();
 }
 
+void MainWindow::onRelaySettingsDialogActionTrigered()
+{
+    if (!relaySettingsDialog_) {
+        relaySettingsDialog_ =
+            new biomolecules::spexpert::gui::RelaySettingsDialog(
+                appCore->appState(),
+                this);
+    }
+    relaySettingsDialog_->show();
+    relaySettingsDialog_->raise();
+    relaySettingsDialog_->activateWindow();
+}
+
 void MainWindow::onExperimentStarted()
 {
     experimentAction->setEnabled(false);
@@ -290,9 +327,13 @@ void MainWindow::createActions()
     neslabSetupAction->setStatusTip(tr("Open Neslab bath and temperature acquisition settings."));
     connect(neslabSetupAction, &QAction::triggered, this, &MainWindow::onNeslabSetupActionTrigered);
 
-    relayControlPanelAction = new QAction{tr("&Control Panel"), this};
-    relayControlPanelAction->setStatusTip(tr("Relay card control panel."));
-    connect(relayControlPanelAction, &QAction::triggered, this, &MainWindow::onRelayControlPanelActionTrigered);
+    relayControlPanelAction_ = new QAction{tr("&Control Panel"), this};
+    relayControlPanelAction_->setStatusTip(tr("Relay card control panel."));
+    connect(relayControlPanelAction_, &QAction::triggered, this, &MainWindow::onRelayControlPanelActionTrigered);
+
+    relaySettingsDialogAction_ = new QAction{tr("&Settings"), this};
+    relaySettingsDialogAction_->setStatusTip(tr("Relay settings."));
+    connect(relaySettingsDialogAction_, &QAction::triggered, this, &MainWindow::onRelaySettingsDialogActionTrigered);
 }
 
 void MainWindow::createMenus()
@@ -306,7 +347,8 @@ void MainWindow::createMenus()
     setupMenu->addAction(stageSetupAction);
     setupMenu->addAction(neslabSetupAction);
     QMenu* relayMenu = setupMenu->addMenu(tr("&Relay"));
-    relayMenu->addAction(relayControlPanelAction);
+    relayMenu->addAction(relayControlPanelAction_);
+    relayMenu->addAction(relaySettingsDialogAction_);
 
     createLanguageMenu();
 }
@@ -427,6 +469,7 @@ void MainWindow::readSettings()
             params.frm = settings.value("frm", 1).toInt(&ok);
             if (!ok || params.frm < 1)
                 params.frm = 1;
+            params.enableLampSwitch = settings.value("enableLampSwitch", true).toBool();
             cal.insert(ii, params);
         }
     } else {
@@ -437,6 +480,7 @@ void MainWindow::readSettings()
         params.expo = 1.0;
         params.acc = 1;
         params.frm = 1;
+        params.enableLampSwitch = true;
         cal.append(params);
     }
     settings.endArray();
@@ -638,6 +682,22 @@ void MainWindow::readSettings()
 
     settings.beginGroup("relay");
     k8090ComPortName = settings.value("COMPort").toString();
+
+    unsigned int calibrationLampSwitchId = settings.value("calibrationLampSwitchId", 0).toUInt(&ok);
+    if (!ok || calibrationLampSwitchId >= 8) {
+        calibrationLampSwitchId = 0;
+    }
+    appCore->appState()->relaySettings()->calibration_lamp_switch_id
+        = biomolecules::sprelay::core::k8090::from_number(calibrationLampSwitchId);
+
+    auto calibration_relay_action = static_cast<biomolecules::sprelay::core::k8090::CommandID>(
+        settings.value("calibrationLampSwitchAction", 0).toUInt(&ok));
+    if (calibration_relay_action == biomolecules::sprelay::core::k8090::CommandID::RelayOff)
+        appCore->appState()->relaySettings()->calibration_lamp_switch_on = false;
+    else {
+        appCore->appState()->relaySettings()->calibration_lamp_switch_on = true;
+    }
+    settings.endGroup();
 }
 
 MainWindow::~MainWindow()

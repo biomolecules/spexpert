@@ -5,6 +5,10 @@
 #include <QString>
 
 // forward declarations
+
+class QComboBox;
+class QDialogButtonBox;
+
 namespace biomolecules {
 namespace sprelay {
 namespace core {
@@ -14,6 +18,8 @@ class K8090;
 }  // namespace core
 }  // namespace sprelay
 }  // namespace biomolecules
+
+class AppState;
 
 namespace biomolecules {
 namespace spexpert {
@@ -28,8 +34,35 @@ public:
         QWidget* parent = nullptr);
 };
 
+class RelaySettingsDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit RelaySettingsDialog(AppState* appState, QWidget *parent = nullptr);
+
+public slots:
+    void accept() override;
+    void reject() override;
+
+private:
+    const int kInitialCalibrationId = 0;
+
+    void setupUiElements();
+    void fillComboBoxes();
+    void setupComboBoxes();
+    void connectGui();
+    void makeLayout();
+
+    QComboBox* calibration_id_combo_box_;
+    QComboBox* calibration_action_combo_box_;
+    QDialogButtonBox* dialog_button_box_;
+
+    AppState* app_state_;
+};
+
 }  // namespace gui
 }  // namespace spexpert
 }  // namespace biomolecues
 
-#endif // BIOMOLECULES_SPEXPERT_RELAY_CONTROL_PANEL_H_
+#endif  // BIOMOLECULES_SPEXPERT_RELAY_CONTROL_PANEL_H_

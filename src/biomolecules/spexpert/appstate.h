@@ -42,6 +42,13 @@ namespace AutoReadT
 struct Settings;
 }
 }
+namespace biomolecules {
+namespace spexpert {
+namespace relay {
+struct Settings;
+}
+}
+}
 
 namespace biomolecules {
 namespace sprelay {
@@ -100,6 +107,7 @@ struct CalWinSpecParams
     double expo;
     int acc;
     int frm;
+    bool enableLampSwitch;
 };
 
 struct BatchExpParams
@@ -227,6 +235,7 @@ public:
     QDateTime getWaitingStartedTime() const;
     QDateTime getWaitingFinishTime() const;
     StageControlTraits::Params *stageParams();
+    biomolecules::spexpert::relay::Settings* relaySettings();
     NeslabusWidgets::AutoReadT::Settings* autoReadTSettings() const;
     double lastT() const;
 
@@ -334,6 +343,7 @@ private:
     QList<NeslabTasks::Temperatures*> temperatureList_;
 
     StageControlTraits::Params* stageParams_;
+    biomolecules::spexpert::relay::Settings* relaySettings_;
 
     AppStateTraits::InitWinSpecParams initWinSpecParams_;
 

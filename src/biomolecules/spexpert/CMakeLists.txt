@@ -3,6 +3,7 @@ project(${spexpert_project_name}_src)
 # collect files
 set(${spexpert_project_name}_hdr
     lockableqvector.h
+    relay.h
     timespan.h
     usmcvb_com.h
     winspec.h

@@ -63,6 +63,7 @@ private:
     QDoubleSpinBox *calExpoSpinBox;
     QSpinBox *calFrmSpinBox;
     QSpinBox *calAccSpinBox;
+    QCheckBox *calLampSwitchCheckBox;
 
     AppStateTraits::InitWinSpecParams &params_;
     AppState *appState_;

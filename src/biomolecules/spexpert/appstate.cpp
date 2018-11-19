@@ -1,6 +1,7 @@
 #include "appstate.h"
 
 #include <biomolecules/sprelay/core/k8090.h>
+#include <biomolecules/sprelay/core/k8090_defines.h>
 
 #include "winspec.h"
 #include "stagecontrol.h"
@@ -9,6 +10,7 @@
 #include "lockableqvector.h"
 #include "timespan.h"
 #include "exptasks.h"
+#include "relay.h"
 #include <QDebug>
 #include <QMutex>
 #include <QFile>
@@ -22,7 +24,11 @@
 AppState::AppState(AppCore *appCore, QObject *parent)
   : QObject(parent),
     appCore_(appCore),
-    k8090_{new biomolecules::sprelay::core::k8090::K8090{this}}
+    k8090_{new biomolecules::sprelay::core::k8090::K8090{this}},
+    relaySettings_{new biomolecules::spexpert::relay::Settings{
+        biomolecules::sprelay::core::k8090::RelayID::One,  // calibration lamp_switch_id
+        true                                               // calibration_lamp_switch_on
+    }}
 {
     qDebug() << "Startuji AppState...";
 
@@ -494,6 +500,11 @@ StageControlTraits::Params *AppState::stageParams()
     return stageParams_;
 }
 
+biomolecules::spexpert::relay::Settings* AppState::relaySettings()
+{
+    return relaySettings_;
+}
+
 NeslabusWidgets::AutoReadT::Settings *AppState::autoReadTSettings() const
 {
     return autoReadTSettings_;
@@ -744,6 +755,7 @@ AppState::~AppState()
     delete calParamListMutex_;
 
     delete stageParams_;
+    delete relaySettings_;
 
     delete autoReadTSettings_;
 

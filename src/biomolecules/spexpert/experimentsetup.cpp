@@ -129,6 +129,9 @@ ExpSettingsTab::ExpSettingsTab(AppStateTraits::InitWinSpecParams &params, AppSta
     calFrmSpinBox->setValue(params_.cal.at(expNumber).frm);
     calFrmLabel->setBuddy(calFrmSpinBox);
 
+    calLampSwitchCheckBox = new QCheckBox(tr("enable lamp switch"));
+    calLampSwitchCheckBox->setChecked(params_.cal.at(expNumber).enableLampSwitch);
+
     connect(filenameButton, &QPushButton::clicked,
             this, &ExpSettingsTab::onFilenameButtonClicked);
     connect(filenameEdit, &QLineEdit::editingFinished,
@@ -183,8 +186,10 @@ ExpSettingsTab::ExpSettingsTab(AppStateTraits::InitWinSpecParams &params, AppSta
     }
     widgetVLayout->addWidget(autoCalGroupBox);
 
+    vLayout = new QVBoxLayout;
+    autoCalGroupBox->setLayout(vLayout);
     gLayout = new QGridLayout;
-    autoCalGroupBox->setLayout(gLayout);
+    vLayout->addLayout(gLayout);
     gLayout->setColumnStretch(0, 1);
 
     int rowCount = 0;
@@ -199,6 +204,8 @@ ExpSettingsTab::ExpSettingsTab(AppStateTraits::InitWinSpecParams &params, AppSta
 
     gLayout->addWidget(calFrmLabel, rowCount, 0, Qt::AlignRight);
     gLayout->addWidget(calFrmSpinBox, rowCount++, 1);
+
+    vLayout->addWidget(calLampSwitchCheckBox);
 
     mainVLayout->addStretch();
 
@@ -252,6 +259,7 @@ bool ExpSettingsTab::saveParams()
         params_.cal[expNumber_].expo = calExpoSpinBox->value();
         params_.cal[expNumber_].acc = calAccSpinBox->value();
         params_.cal[expNumber_].frm = calFrmSpinBox->value();
+        params_.cal[expNumber_].enableLampSwitch = calLampSwitchCheckBox->isChecked();
     }
 
     return true;
@@ -1579,7 +1587,8 @@ void ExtRanTab::addItem(int expNumber)
                             params_.cal.at(addExpNumber - 1).eachMeas,
                             params_.cal.at(addExpNumber - 1).expo,
                             params_.cal.at(addExpNumber - 1).acc,
-                            params_.cal.at(addExpNumber - 1).frm};
+                            params_.cal.at(addExpNumber - 1).frm,
+                            params_.cal.at(addExpNumber - 1).enableLampSwitch};
         if (params_.tExp.tExp || params_.batch.batchExp) {
             fileNameBase = QString("temp%1_").arg(addExpNumber);
         } else {
@@ -1588,7 +1597,7 @@ void ExtRanTab::addItem(int expNumber)
     } else {
         fileNameBase = "temp";
         expWinSpecParams = {0, fileNameBase, "", 1.0, 1, 1};
-        calWinSpecParams = {true, 1, 1.0, 1, 1};
+        calWinSpecParams = {true, 1, 1.0, 1, 1, true};
     }
     params_.expe.insert(addExpNumber, expWinSpecParams);
     params_.cal.insert(addExpNumber, calWinSpecParams);

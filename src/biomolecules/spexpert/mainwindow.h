@@ -17,6 +17,7 @@ namespace biomolecules {
 namespace spexpert {
 namespace gui {
 class RelayControlPanel;
+class RelaySettingsDialog;
 }  // namespace gui
 }  // namespace spexpert
 }  // namespace biomolecules
@@ -43,6 +44,7 @@ private slots:
     void onStageSetupActionTrigered();
     void onNeslabSetupActionTrigered();
     void onRelayControlPanelActionTrigered();
+    void onRelaySettingsDialogActionTrigered();
     void onExperimentStarted();
     void onExperimentFinished();
     void onK8090Connected();
@@ -57,6 +59,7 @@ private:
     CentralWidget *centralWidget;
     NeslabusWidgets::MainDialogWindow *neslabDialogWindow;
     biomolecules::spexpert::gui::RelayControlPanel* relayControlPanel_;
+    biomolecules::spexpert::gui::RelaySettingsDialog* relaySettingsDialog_;
     AppCore *appCore;
 
     QAction *exitAction;
@@ -64,7 +67,8 @@ private:
     QAction *experimentAction;
     QAction *stageSetupAction;
     QAction *neslabSetupAction;
-    QAction *relayControlPanelAction;
+    QAction *relayControlPanelAction_;
+    QAction *relaySettingsDialogAction_;
 
     QActionGroup * langActionGroup;
 
