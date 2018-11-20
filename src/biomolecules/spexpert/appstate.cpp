@@ -27,7 +27,8 @@ AppState::AppState(AppCore *appCore, QObject *parent)
     k8090_{new biomolecules::sprelay::core::k8090::K8090{this}},
     relaySettings_{new biomolecules::spexpert::relay::Settings{
         biomolecules::sprelay::core::k8090::RelayID::One,  // calibration lamp_switch_id
-        true                                               // calibration_lamp_switch_on
+        true,                                              // calibration_lamp_switch_on
+        1000                                               // calibration_lamp_switch_delay_msec
     }}
 {
     qDebug() << "Startuji AppState...";

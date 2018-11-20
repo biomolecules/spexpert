@@ -1,6 +1,8 @@
 #ifndef EXPTASKS_H
 #define EXPTASKS_H
 
+#include <biomolecules/sprelay/core/k8090_defines.h>
+
 #include "exptask.h"
 #include "waittasklist.h"
 
@@ -19,6 +21,15 @@ enum class InitType;
 enum class LimType;
 enum class PosType;
 }
+namespace biomolecules {
+namespace sprelay {
+namespace core {
+namespace k8090 {
+class K8090;
+}  // k8090
+}  // core
+}  // sprelay
+}  // biomolecules
 
 class StartWaitingTask : public ExpTask
 {
@@ -183,7 +194,7 @@ class ExpList : public ExpTaskList
     Q_OBJECT
 
 public:
-    ExpList(AppState *appState, bool cal, QObject *parent = 0);
+    ExpList(AppState *appState, bool cal, int expNumber, QObject *parent = 0);
 };
 
 } // namespace WinSpecTasks
@@ -415,6 +426,30 @@ private:
 };
 
 } // namespace NeslabTasks
+
+namespace RelayTasks {
+
+class SwitchRelay : public ExpTask
+{
+    Q_OBJECT
+
+public:
+    SwitchRelay(
+        biomolecules::sprelay::core::k8090::K8090* k8090,
+        biomolecules::sprelay::core::k8090::CommandID commandId,
+        biomolecules::sprelay::core::k8090::RelayID relayId,
+        QObject *parent = 0);
+
+public slots:
+    void start() override;
+
+private:
+    biomolecules::sprelay::core::k8090::K8090* k8090_;
+    biomolecules::sprelay::core::k8090::CommandID commandId_;
+    biomolecules::sprelay::core::k8090::RelayID relayId_;
+};
+
+}  // namespace RelayTasks
 
 namespace GratingTasks
 {

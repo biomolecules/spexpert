@@ -24,10 +24,10 @@ enum struct WaitFor : unsigned char
     WinSpec = 1 << 1,
     Motor   = 1 << 2,
     Grating = 1 << 3,
-    Other1  = 1 << 4,
-    Other2  = 1 << 5,
-    Other3  = 1 << 6,
-    Other4  = 1 << 7
+    Lamp    = 1 << 4,
+    Other1  = 1 << 5,
+    Other2  = 1 << 6,
+    Other3  = 1 << 7
 };
 
 inline constexpr WaitFor operator|(WaitFor a, WaitFor b) {

@@ -28,6 +28,7 @@ enum class TaskType {
     Waiting,
     NeslabSetT,
     NesalbReadT,
+    SwitchRelay,
     GratingSendToPos,
     SaveLog,
     WinSpecExpList,

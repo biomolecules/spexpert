@@ -13,6 +13,7 @@ struct Settings
 {
     sprelay::core::k8090::RelayID calibration_lamp_switch_id;
     bool calibration_lamp_switch_on;
+    unsigned int calibration_lamp_switch_delay_msec;
 };
 
 }  // biomolecules

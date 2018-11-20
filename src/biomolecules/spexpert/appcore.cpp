@@ -15,7 +15,7 @@
 #include "exptasks.h"
 #include "waittasks.h"
 #include "waittasklist.h"
-
+#include "relay.h"
 #include "timespan.h"
 
 #include <QTimer>
@@ -1213,7 +1213,7 @@ void AppCore::buildBodyExpTasks(WaitTaskList *waitTaskList)
         taskItem.taskType = ExpTaskListTraits::TaskType::WholeExtExpList;
         waitTaskList->addTask(taskItem);
     } else {
-        taskItem.task = new WinSpecTasks::ExpList(appState_, false, this);
+        taskItem.task = new WinSpecTasks::ExpList(appState_, false, 0, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         waitTaskList->addTask(taskItem);
         if (params->cal.at(0).autoCal) {
@@ -1228,7 +1228,7 @@ void AppCore::buildBodyExpTasks(WaitTaskList *waitTaskList)
                     ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
             waitTaskList->addTask(taskItem);
 
-            taskItem.task = new WinSpecTasks::ExpList(appState_, true, this);
+            taskItem.task = new WinSpecTasks::ExpList(appState_, true, 0, this);
             taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
             waitTaskList->addTask(taskItem);
 

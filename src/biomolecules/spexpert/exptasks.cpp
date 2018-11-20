@@ -1,4 +1,7 @@
 #include <QStringBuilder>
+
+#include <biomolecules/sprelay/core/k8090.h>
+
 #include "exptasks.h"
 #include "waittasks.h"
 #include "appstate.h"
@@ -8,6 +11,7 @@
 #include "appcore.h"
 #include "mainwindow.h"
 #include "timespan.h"
+#include "relay.h"
 #include <QFileInfo>
 #include <QDir>
 
@@ -327,11 +331,41 @@ void WinSpecTasks::AddExpNumber::start()
     emit finished();
 }
 
-WinSpecTasks::ExpList::ExpList(AppState *appState, bool cal, QObject *parent) :
+WinSpecTasks::ExpList::ExpList(AppState *appState, bool cal, int expNumber, QObject *parent) :
     ExpTaskList(parent)
 {
     ExpTaskListTraits::TaskItem taskItem;
     WaitTaskListTraits::TaskItem waitTaskItem;
+
+    if (cal && appState->initWinSpecParams()->cal.at(expNumber).enableLampSwitch) {
+        biomolecules::sprelay::core::k8090::CommandID commandId;
+        if (appState->relaySettings()->calibration_lamp_switch_on) {
+            commandId = biomolecules::sprelay::core::k8090::CommandID::RelayOn;
+        } else {
+            commandId = biomolecules::sprelay::core::k8090::CommandID::RelayOff;
+        }
+        taskItem.task = new RelayTasks::SwitchRelay{
+            appState->k8090(),
+            commandId,
+            appState->relaySettings()->calibration_lamp_switch_id};
+        taskItem.taskType = ExpTaskListTraits::TaskType::SwitchRelay;
+        addTask(taskItem);
+
+        WaitTaskListTraits::TaskItem waitTaskItem;
+        TimeSpan calibration_lamp_switch_delay;
+        calibration_lamp_switch_delay
+            .fromMSec(appState->relaySettings()->calibration_lamp_switch_delay_msec);
+        waitTaskItem.task = new DelayWaitTask(
+            appState, &calibration_lamp_switch_delay, this);
+        waitTaskItem.waitFor = WaitTaskListTraits::WaitFor::Lamp;
+        taskItem.task = new WaitExpTask(waitTaskItem, this);
+        taskItem.taskType = ExpTaskListTraits::TaskType::WaitExp;
+        addTask(taskItem);
+
+        taskItem.task = new WaitingTask(this);
+        taskItem.taskType = ExpTaskListTraits::TaskType::Waiting;
+        addTask(taskItem);
+    }
 
     taskItem.task = new WinSpecTasks::Start(appState, cal, this);
     taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecStart;
@@ -362,6 +396,21 @@ WinSpecTasks::ExpList::ExpList(AppState *appState, bool cal, QObject *parent) :
     taskItem.task = new WaitingTask(this);
     taskItem.taskType = ExpTaskListTraits::TaskType::Waiting;
     addTask(taskItem);
+
+    if (cal && appState->initWinSpecParams()->cal.at(expNumber).enableLampSwitch) {
+        biomolecules::sprelay::core::k8090::CommandID commandId;
+        if (appState->relaySettings()->calibration_lamp_switch_on) {
+            commandId = biomolecules::sprelay::core::k8090::CommandID::RelayOff;
+        } else {
+            commandId = biomolecules::sprelay::core::k8090::CommandID::RelayOn;
+        }
+        taskItem.task = new RelayTasks::SwitchRelay{
+            appState->k8090(),
+            commandId,
+            appState->relaySettings()->calibration_lamp_switch_id};
+        taskItem.taskType = ExpTaskListTraits::TaskType::SwitchRelay;
+        addTask(taskItem);
+    }
 }
 
 StageTasks::Run::Run(AppState *pappState, int dest,
@@ -955,6 +1004,26 @@ void NeslabTasks::ReadT::start()
     emit finished();
 }
 
+RelayTasks::SwitchRelay::SwitchRelay(
+    biomolecules::sprelay::core::k8090::K8090 *k8090,
+    biomolecules::sprelay::core::k8090::CommandID commandId,
+    biomolecules::sprelay::core::k8090::RelayID relayId,
+    QObject *parent)
+    : ExpTask{parent}, k8090_{k8090}, commandId_{commandId}, relayId_{relayId}
+{}
+
+void RelayTasks::SwitchRelay::start()
+{
+    if (commandId_ == biomolecules::sprelay::core::k8090::CommandID::RelayOn) {
+        qDebug() << "RelayTasks::SwitchRelay::start(): Relay on!";
+        k8090_->switchRelayOn(relayId_);
+    } else if (commandId_ == biomolecules::sprelay::core::k8090::CommandID::RelayOff) {
+        qDebug() << "RelayTasks::SwitchRelay::start(): Relay off!";
+        k8090_->switchRelayOff(relayId_);
+    }
+    emit finished();
+}
+
 GratingTasks::SendToPos::SendToPos(AppState *appState, WinSpecTasks::Params *wsp, QObject *parent) :
     ExpTask(parent), appState_(appState), winSpecParams_(wsp), useWinSpecParams(true), autoGetPos(false)
 {
@@ -1009,7 +1078,7 @@ WholeExtExpList::WholeExtExpList(AppState *appState, QObject *parent) :
     WaitTaskListTraits::TaskItem waitTaskItem;
 
     for (int ii = 0; ii < params->expe.size() - 1; ++ii) {
-        taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+        taskItem.task = new WinSpecTasks::ExpList(appState, false, ii, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
 
@@ -1023,7 +1092,7 @@ WholeExtExpList::WholeExtExpList(AppState *appState, QObject *parent) :
             taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
             addTask(taskItem);
 
-            taskItem.task = new WinSpecTasks::ExpList(appState, true, this);
+            taskItem.task = new WinSpecTasks::ExpList(appState, true, ii, this);
             taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
             addTask(taskItem);
 
@@ -1102,7 +1171,7 @@ TExpList::TExpList(AppState *appState, TimeSpan *delay, int expNumber, int shift
     WaitTaskListTraits::TaskItem waitTaskItem;
     ForkJoinTask * forkJoinTask;
 
-    taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+    taskItem.task = new WinSpecTasks::ExpList(appState, false, expNumber, this);
     taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
     addTask(taskItem);
     if (params->tExp.delayMeas) {
@@ -1133,7 +1202,7 @@ TExpList::TExpList(AppState *appState, TimeSpan *delay, int expNumber, int shift
             taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
             forkJoinTask->addTask(taskItem, 1);
 
-            taskItem.task = new WinSpecTasks::ExpList(appState, true, this);
+            taskItem.task = new WinSpecTasks::ExpList(appState, true, expNumber, this);
             taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
             forkJoinTask->addTask(taskItem, 1);
 
@@ -1212,7 +1281,7 @@ TExpList::TExpList(AppState *appState, TimeSpan *delay, int expNumber, int shift
         taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
         addTask(taskItem);
 
-        taskItem.task = new WinSpecTasks::ExpList(appState, true, this);
+        taskItem.task = new WinSpecTasks::ExpList(appState, true, expNumber, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
 
@@ -1380,7 +1449,7 @@ WholeTExpList::WholeTExpList(AppState *appState, QObject *parent) :
                     addTask(taskItem);
                 }
             }
-            taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+            taskItem.task = new WinSpecTasks::ExpList(appState, false, params->expe.size() - 1, this);
             taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
             addTask(taskItem);
         } else {
@@ -1415,7 +1484,7 @@ WholeTExpList::WholeTExpList(AppState *appState, QObject *parent) :
             }
             // the last task is may be without delay, so the last task is only
             // spectrum measurement, see next taskItem.
-            taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+            taskItem.task = new WinSpecTasks::ExpList(appState, false, 0, this);
             taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
             addTask(taskItem);
         }
@@ -1426,7 +1495,13 @@ WholeTExpList::WholeTExpList(AppState *appState, QObject *parent) :
         taskItem.taskType = ExpTaskListTraits::TaskType::NeslabSetT;
         addTask(taskItem);
     }
-    if (params->cal.at(0).autoCal) {
+    int lastExpNumber;
+    if (params->extRan.extendedRange) {
+        lastExpNumber = params->expe.size() - 1;
+    } else {
+        lastExpNumber = 0;
+    }
+    if (params->cal.at(lastExpNumber).autoCal) {
         TimeSpan timeSpan;
         taskItem.task = new StartWaitingTask(appState, &timeSpan, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
@@ -1436,7 +1511,7 @@ WholeTExpList::WholeTExpList(AppState *appState, QObject *parent) :
         taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
         addTask(taskItem);
 
-        taskItem.task = new WinSpecTasks::ExpList(appState, true, this);
+        taskItem.task = new WinSpecTasks::ExpList(appState, true, lastExpNumber, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
 
@@ -1564,7 +1639,7 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
                         addTask(taskItem);
                     }
                 }
-                taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+                taskItem.task = new WinSpecTasks::ExpList(appState, false, params->expe.size() - 1, this);
                 taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
                 addTask(taskItem);
             } else {
@@ -1599,19 +1674,21 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
                 }
                 // the last task is may be without delay, so the last task is only
                 // spectrum measurement, see next taskItem.
-                taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+                taskItem.task = new WinSpecTasks::ExpList(appState, false, 0, this);
                 taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
                 addTask(taskItem);
             }
         }
-    } else {
-        taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+    } else {  // TODO(lumik): Bug? What about extended range?
+        taskItem.task = new WinSpecTasks::ExpList(appState, false, 0, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
     }
 
+    int lastExpNumber;
     int n;
     if (params->extRan.extendedRange) {
+        lastExpNumber = params->expe.size() - 1;
         if (params->batch.batchExp && params->tExp.tExp) {
             n = params->batch.numSpectra;
         } else {
@@ -1620,6 +1697,8 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
         if (params->tExp.loop) {
             n = 2 * n;
         }
+    } else {
+        lastExpNumber = 0;
     }
 
     if (params->batch.delayMeas) {
@@ -1627,7 +1706,7 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
         taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
         addTask(taskItem);
 
-        if (params->cal.at(0).autoCal) {
+        if (params->cal.at(lastExpNumber).autoCal) {
             forkJoinTask = new ForkJoinTask(2, this);
 
             // thread no. 0
@@ -1661,7 +1740,7 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
             taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
             forkJoinTask->addTask(taskItem, 1);
 
-            taskItem.task = new WinSpecTasks::ExpList(appState, true, this);
+            taskItem.task = new WinSpecTasks::ExpList(appState, true, lastExpNumber, this);
             taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
             forkJoinTask->addTask(taskItem, 1);
 
@@ -1786,7 +1865,7 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
         taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
         addTask(taskItem);
 
-        taskItem.task = new WinSpecTasks::ExpList(appState, true, this);
+        taskItem.task = new WinSpecTasks::ExpList(appState, true, lastExpNumber, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
         if (params->extRan.extendedRange) {
@@ -1955,7 +2034,7 @@ WholeBatchExpList::WholeBatchExpList(AppState *appState, QObject *parent) :
                     addTask(taskItem);
                 }
             }
-            taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+            taskItem.task = new WinSpecTasks::ExpList(appState, false, params->expe.size() - 1, this);
             taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
             addTask(taskItem);
         } else {
@@ -1990,12 +2069,12 @@ WholeBatchExpList::WholeBatchExpList(AppState *appState, QObject *parent) :
             }
             // the last task is may be without delay, so the last task is only
             // spectrum measurement, see next taskItem.
-            taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+            taskItem.task = new WinSpecTasks::ExpList(appState, false, 0, this);
             taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
             addTask(taskItem);
         }
-    } else {
-        taskItem.task = new WinSpecTasks::ExpList(appState, false, this);
+    } else {  // TODO(lumik): Bug? What about extended range?
+        taskItem.task = new WinSpecTasks::ExpList(appState, false, 0, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
     }
@@ -2004,7 +2083,13 @@ WholeBatchExpList::WholeBatchExpList(AppState *appState, QObject *parent) :
         taskItem.taskType = ExpTaskListTraits::TaskType::NeslabSetT;
         addTask(taskItem);
     }
-    if (params->cal.at(0).autoCal) {
+    int lastExpNumber;
+    if (params->extRan.extendedRange) {
+        lastExpNumber = params->expe.size() - 1;
+    } else {
+        lastExpNumber = 0;
+    }
+    if (params->cal.at(lastExpNumber).autoCal) {
         TimeSpan timeSpan;
         taskItem.task = new StartWaitingTask(appState, &timeSpan, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
@@ -2014,7 +2099,7 @@ WholeBatchExpList::WholeBatchExpList(AppState *appState, QObject *parent) :
         taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
         addTask(taskItem);
 
-        taskItem.task = new WinSpecTasks::ExpList(appState, true, this);
+        taskItem.task = new WinSpecTasks::ExpList(appState, true, lastExpNumber, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
 
