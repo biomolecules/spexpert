@@ -1,6 +1,7 @@
 #include <QStringBuilder>
 
 #include <biomolecules/sprelay/core/k8090.h>
+#include <biomolecules/sprelay/core/k8090_defines.h>
 
 #include "appcore.h"
 #include "centralwidget.h"
@@ -961,6 +962,20 @@ void AppCore::buildInitialExpTaks(WaitTaskList *waitTaskList)
     AppStateTraits::InitWinSpecParams *params = appState()->initWinSpecParams();
     ExpTaskListTraits::TaskItem taskItem;
     WaitTaskListTraits::TaskItem waitTaskItem;
+    if (params->cal.at(0).autoCal && params->cal.at(0).enableLampSwitch) {
+        biomolecules::sprelay::core::k8090::CommandID commandId;
+        if (appState()->relaySettings()->calibration_lamp_switch_on) {
+            commandId = biomolecules::sprelay::core::k8090::CommandID::RelayOff;
+        } else {
+            commandId = biomolecules::sprelay::core::k8090::CommandID::RelayOn;
+        }
+        taskItem.task = new RelayTasks::SwitchRelay{
+            appState()->k8090(),
+            commandId,
+            appState()->relaySettings()->calibration_lamp_switch_id};
+        taskItem.taskType = ExpTaskListTraits::TaskType::SwitchRelay;
+        waitTaskList->addTask(taskItem);
+    }
     if (params->tExp.tExp) {
         WaitTaskListTraits::TaskItem waitTaskItem;
         ForkJoinTask * forkJoinTask;
