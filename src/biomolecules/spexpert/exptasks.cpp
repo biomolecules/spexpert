@@ -1077,7 +1077,7 @@ WholeExtExpList::WholeExtExpList(AppState *appState, QObject *parent) :
     ExpTaskListTraits::TaskItem taskItem;
     WaitTaskListTraits::TaskItem waitTaskItem;
 
-    for (int ii = 0; ii < params->expe.size() - 1; ++ii) {
+    for (int ii = 0; ii < params->expe.size(); ++ii) {
         taskItem.task = new WinSpecTasks::ExpList(appState, false, ii, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
@@ -1102,7 +1102,11 @@ WholeExtExpList::WholeExtExpList(AppState *appState, QObject *parent) :
             taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
             fj->addTask(taskItem, 0);
 
-            taskItem.task = new GratingTasks::SendToPos(appState, true, 1, this);
+            if (ii == params->expe.size() - 1) {
+                taskItem.task = new GratingTasks::SendToPos(appState, params->expe.at(0).grPos, this);
+            } else {
+                taskItem.task = new GratingTasks::SendToPos(appState, true, 1, this);
+            }
             taskItem.taskType = ExpTaskListTraits::TaskType::GratingSendToPos;
             fj->addTask(taskItem, 1);
 
@@ -1131,7 +1135,11 @@ WholeExtExpList::WholeExtExpList(AppState *appState, QObject *parent) :
             taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
             addTask(taskItem);
 
-            taskItem.task = new GratingTasks::SendToPos(appState, true, 1, this);
+            if (ii == params->expe.size() - 1) {
+                taskItem.task = new GratingTasks::SendToPos(appState, params->expe.at(0).grPos, this);
+            } else {
+                taskItem.task = new GratingTasks::SendToPos(appState, true, 1, this);
+            }
             taskItem.taskType = ExpTaskListTraits::TaskType::GratingSendToPos;
             addTask(taskItem);
 
@@ -1153,7 +1161,6 @@ WholeExtExpList::WholeExtExpList(AppState *appState, QObject *parent) :
                     appState, 1, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecAddExpNumber;
         addTask(taskItem);
-
     }
 }
 
