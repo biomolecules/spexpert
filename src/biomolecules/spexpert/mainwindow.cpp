@@ -219,6 +219,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         settings.setValue("calibrationLampSwitchAction",
             static_cast<unsigned int>(biomolecules::sprelay::core::k8090::CommandID::RelayOff));
     }
+    settings.setValue("calibrationLampSwitchDelayMSec", relaySettings->calibration_lamp_switch_delay_msec);
     settings.endGroup();
 }
 
@@ -698,6 +699,11 @@ void MainWindow::readSettings()
     else {
         appCore->appState()->relaySettings()->calibration_lamp_switch_on = true;
     }
+    unsigned int calSwitchDelayMSec = settings.value("calibrationLampSwitchDelayMSec", 1000).toUInt(&ok);
+    if (!ok) {
+        calSwitchDelayMSec = 1000;
+    }
+    appCore->appState()->relaySettings()->calibration_lamp_switch_delay_msec = calSwitchDelayMSec;
     settings.endGroup();
 }
 

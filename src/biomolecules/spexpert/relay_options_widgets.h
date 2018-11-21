@@ -8,6 +8,7 @@
 
 class QComboBox;
 class QDialogButtonBox;
+class QDoubleSpinBox;
 
 namespace biomolecules {
 namespace sprelay {
@@ -50,12 +51,13 @@ private:
 
     void setupUiElements();
     void fillComboBoxes();
-    void setupComboBoxes();
+    void resetUiElements();
     void connectGui();
     void makeLayout();
 
     QComboBox* calibration_id_combo_box_;
     QComboBox* calibration_action_combo_box_;
+    QDoubleSpinBox* calibration_delay_spin_box_;
     QDialogButtonBox* dialog_button_box_;
 
     AppState* app_state_;

@@ -2,6 +2,7 @@
 
 #include <QComboBox>
 #include <QDialogButtonBox>
+#include <QDoubleSpinBox>
 #include <QLabel>
 #include <QLayout>
 
@@ -37,6 +38,7 @@ RelaySettingsDialog::RelaySettingsDialog(AppState *appState, QWidget *parent)
     : QDialog{parent},
       calibration_id_combo_box_{new QComboBox{this}},
       calibration_action_combo_box_{new QComboBox{this}},
+      calibration_delay_spin_box_{new QDoubleSpinBox{this}},
       dialog_button_box_{new QDialogButtonBox{QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this}},
       app_state_{appState}
 {
@@ -53,13 +55,15 @@ void RelaySettingsDialog::accept()
         static_cast<unsigned char>(calibration_id_combo_box_->currentData().toUInt(&ok)));
     app_state_->relaySettings()->calibration_lamp_switch_on =
         calibration_action_combo_box_->currentData().toUInt(&ok);
+    app_state_->relaySettings()->calibration_lamp_switch_delay_msec =
+        static_cast<unsigned int>(calibration_delay_spin_box_->value() * 1000);
     QDialog::accept();
 }
 
 
 void RelaySettingsDialog::reject()
 {
-    setupComboBoxes();
+    resetUiElements();
     QDialog::reject();
 }
 
@@ -68,7 +72,7 @@ void RelaySettingsDialog::setupUiElements()
 {
     setWindowTitle("Relay settings");
     fillComboBoxes();
-    setupComboBoxes();
+    resetUiElements();
 }
 
 
@@ -82,7 +86,7 @@ void RelaySettingsDialog::fillComboBoxes()
 }
 
 
-void RelaySettingsDialog::setupComboBoxes()
+void RelaySettingsDialog::resetUiElements()
 {
     unsigned int relay_id_repr;
     for (relay_id_repr = 0; relay_id_repr < 8; ++relay_id_repr) {
@@ -107,6 +111,13 @@ void RelaySettingsDialog::setupComboBoxes()
         relay_action_index = 0;
     }
     calibration_action_combo_box_->setCurrentIndex(relay_action_index);
+
+    calibration_delay_spin_box_->setMinimum(0.00);
+    calibration_delay_spin_box_->setMaximum(999999.99);
+    calibration_delay_spin_box_->setDecimals(3);
+    calibration_delay_spin_box_->setSingleStep(1.0);
+    calibration_delay_spin_box_->setValue(
+        static_cast<double>(app_state_->relaySettings()->calibration_lamp_switch_delay_msec) / 1000.);
 }
 
 
@@ -124,9 +135,11 @@ void RelaySettingsDialog::makeLayout()
     main_layout->addLayout(grid_layout);
     grid_layout->addWidget(new QLabel{"Relay", this}, 0, 1, Qt::AlignHCenter);
     grid_layout->addWidget(new QLabel{"Action", this}, 0, 2, Qt::AlignHCenter);
+    grid_layout->addWidget(new QLabel{"Delay (s)", this}, 0, 3, Qt::AlignHCenter);
     grid_layout->addWidget(new QLabel{"Calibration lamp switch:", this}, 1, 0);
     grid_layout->addWidget(calibration_id_combo_box_, 1, 1);
     grid_layout->addWidget(calibration_action_combo_box_, 1, 2);
+    grid_layout->addWidget(calibration_delay_spin_box_, 1, 3);
     main_layout->addWidget(dialog_button_box_);
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
