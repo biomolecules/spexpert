@@ -120,6 +120,11 @@ endif()
 if (MOCK_NESLAB_BATH)
     target_compile_definitions(${spexpert_project_name} PRIVATE SPEXPERT_MOCK_NESLAB_BATH)
 endif()
+# add possible link flags
+if (spexpert_standalone_application_link_flags)
+    set_target_properties(${spexpert_project_name} PROPERTIES LINK_FLAGS
+        ${spexpert_standalone_application_link_flags})
+endif()
 
 # attach header files to the library (mainly to display them in IDEs)
 target_sources(${spexpert_project_name} PRIVATE
