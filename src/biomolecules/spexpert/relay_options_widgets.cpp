@@ -19,6 +19,7 @@ RelayControlPanel::RelayControlPanel(biomolecules::sprelay::core::k8090::K8090* 
     QWidget* parent) : QDialog{parent}
 {
     setWindowTitle("Relay control panel");
+    setWindowFlags(Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
     auto central_widget = new biomolecules::sprelay::gui::CentralWidget{k8090, std::move(com_port_name), this};
     auto dialog_button_box = new QDialogButtonBox(QDialogButtonBox::Close, this);
     connect(dialog_button_box, &QDialogButtonBox::rejected, this, &RelayControlPanel::reject);
@@ -71,6 +72,7 @@ void RelaySettingsDialog::reject()
 void RelaySettingsDialog::setupUiElements()
 {
     setWindowTitle("Relay settings");
+    setWindowFlags(Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
     fillComboBoxes();
     resetUiElements();
 }

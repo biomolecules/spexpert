@@ -22,7 +22,7 @@
 #include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), relayControlPanel_{nullptr}, relaySettingsDialog_{nullptr}
+    QMainWindow(parent)
 {
     QSettings settings(QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + ".ini",QSettings::IniFormat);
     settings.beginGroup("MainApp");
@@ -34,8 +34,6 @@ MainWindow::MainWindow(QWidget *parent) :
 //    statusBar()->setSizeGripEnabled(false);
 //    statusBar()->setStyleSheet("QStatusBar::item {border: none;}");
     statusBar()->setStyleSheet("QStatusBar {border-top: 1px solid gray;}");
-
-    neslabDialogWindow = nullptr;
 
     appCore = new AppCore(centralWidget, statusBar(), this, this);
     setCentralWidget(centralWidget);
@@ -73,10 +71,10 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::onStartReadingTemperature()
 {
     if (!neslabDialogWindow) {
-        neslabDialogWindow =
+        neslabDialogWindow.reset(
                 new NeslabusWidgets::MainDialogWindow(appCore->appState()->neslab(),
                                                       &neslabComPortName,
-                                                      appCore->appState()->autoReadTSettings());
+                                                      appCore->appState()->autoReadTSettings()));
     }
     neslabDialogWindow->onStartAutoT();
 }
@@ -90,8 +88,6 @@ void MainWindow::onFinishReadingTemperature()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    delete neslabDialogWindow;
-
     QSettings settings(QCoreApplication::applicationDirPath() + "/" + QCoreApplication::applicationName() + ".ini",QSettings::IniFormat);
     settings.beginGroup("MainApp");
     settings.setValue("language", defaultLanguage);
@@ -254,10 +250,10 @@ void MainWindow::onStageSetupActionTrigered()
 void MainWindow::onNeslabSetupActionTrigered()
 {
     if (!neslabDialogWindow) {
-        neslabDialogWindow =
+        neslabDialogWindow.reset(
                 new NeslabusWidgets::MainDialogWindow(appCore->appState()->neslab(),
                                                       &neslabComPortName,
-                                                      appCore->appState()->autoReadTSettings());
+                                                      appCore->appState()->autoReadTSettings()));
     }
     neslabDialogWindow->show();
     neslabDialogWindow->raise();
@@ -267,11 +263,10 @@ void MainWindow::onNeslabSetupActionTrigered()
 void MainWindow::onRelayControlPanelActionTrigered()
 {
     if (!relayControlPanel_) {
-        relayControlPanel_ =
+        relayControlPanel_.reset(
             new biomolecules::spexpert::gui::RelayControlPanel(
                 appCore->appState()->k8090(),
-                k8090ComPortName,
-                this);
+                k8090ComPortName));
     }
     relayControlPanel_->show();
     relayControlPanel_->raise();
@@ -281,10 +276,9 @@ void MainWindow::onRelayControlPanelActionTrigered()
 void MainWindow::onRelaySettingsDialogActionTrigered()
 {
     if (!relaySettingsDialog_) {
-        relaySettingsDialog_ =
+        relaySettingsDialog_.reset(
             new biomolecules::spexpert::gui::RelaySettingsDialog(
-                appCore->appState(),
-                this);
+                appCore->appState()));
     }
     relaySettingsDialog_->show();
     relaySettingsDialog_->raise();

@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <memory>
+
 #include <QMainWindow>
 
 // forward declarations
@@ -57,9 +59,9 @@ private:
     void readSettings();
 
     CentralWidget *centralWidget;
-    NeslabusWidgets::MainDialogWindow *neslabDialogWindow;
-    biomolecules::spexpert::gui::RelayControlPanel* relayControlPanel_;
-    biomolecules::spexpert::gui::RelaySettingsDialog* relaySettingsDialog_;
+    std::unique_ptr<NeslabusWidgets::MainDialogWindow> neslabDialogWindow;
+    std::unique_ptr<biomolecules::spexpert::gui::RelayControlPanel> relayControlPanel_;
+    std::unique_ptr<biomolecules::spexpert::gui::RelaySettingsDialog> relaySettingsDialog_;
     AppCore *appCore;
 
     QAction *exitAction;
