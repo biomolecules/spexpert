@@ -1686,7 +1686,91 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
                 addTask(taskItem);
             }
         }
-    } else {  // TODO(lumik): Bug? What about extended range?
+    } else if (params->extRan.extendedRange) {
+        for (int ii = 0; ii < params->expe.size() - 1; ++ii) {
+            qDebug() << "BatchExpList::BatchExpList(): adding ExpTask no " << ii;
+            taskItem.task = new WinSpecTasks::ExpList(appState, false, ii, this);
+            taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
+            addTask(taskItem);
+
+            if (params->cal.at(ii).autoCal) {
+                TimeSpan timeSpan;
+                taskItem.task = new StartWaitingTask(appState, &timeSpan, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                addTask(taskItem);
+
+                taskItem.task = new StageTasks::GoToPosExpList(appState, StageControlTraits::PosType::Calibration, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
+                addTask(taskItem);
+
+                taskItem.task = new WinSpecTasks::ExpList(appState, true, ii, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
+                addTask(taskItem);
+
+                ForkJoinTask *fj = new ForkJoinTask(2, this);
+
+                taskItem.task = new StageTasks::GoToPosExpList(appState, StageControlTraits::PosType::Measurement, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
+                fj->addTask(taskItem, 0);
+
+                taskItem.task = new GratingTasks::SendToPos(appState, true, 1, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::GratingSendToPos;
+                fj->addTask(taskItem, 1);
+
+                waitTaskItem.task = new GratingWaitTask(appState, appState);
+                waitTaskItem.waitFor = WaitTaskListTraits::WaitFor::Grating;
+                taskItem.task = new WaitExpTask(waitTaskItem, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::WaitExp;
+                fj->addTask(taskItem, 1);
+
+                taskItem.task = new WaitingTask(this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::Waiting;
+                fj->addTask(taskItem, 1);
+
+                taskItem.task = fj;
+                taskItem.taskType = ExpTaskListTraits::TaskType::ForkJoin;
+                addTask(taskItem);
+                // ForkJoinTask filling end
+
+                taskItem.task = new FinishWaitingTask(appState, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                addTask(taskItem);
+            } else {
+                TimeSpan timeSpan;
+                taskItem.task = new StartWaitingTask(appState, &timeSpan, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                addTask(taskItem);
+
+                taskItem.task = new GratingTasks::SendToPos(appState, true, 1, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::GratingSendToPos;
+                addTask(taskItem);
+
+                waitTaskItem.task = new GratingWaitTask(appState, appState);
+                waitTaskItem.waitFor = WaitTaskListTraits::WaitFor::Grating;
+                taskItem.task = new WaitExpTask(waitTaskItem, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::WaitExp;
+                addTask(taskItem);
+
+                taskItem.task = new WaitingTask(this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::Waiting;
+                addTask(taskItem);
+
+                taskItem.task = new FinishWaitingTask(appState, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                addTask(taskItem);
+            }
+            taskItem.task = new WinSpecTasks::AddExpNumber(
+                        appState, 1, this);
+            taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecAddExpNumber;
+            addTask(taskItem);
+        }
+        // the last task may be without delay, so the last task is only
+        // spectrum measurement, see next taskItem.
+        qDebug() << "BatchExpList::BatchExpList(): adding last ExpTask";
+        taskItem.task = new WinSpecTasks::ExpList(appState, false, params->expe.size() - 1, this);
+        taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
+        addTask(taskItem);
+    } else {
         taskItem.task = new WinSpecTasks::ExpList(appState, false, 0, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
@@ -2080,7 +2164,90 @@ WholeBatchExpList::WholeBatchExpList(AppState *appState, QObject *parent) :
             taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
             addTask(taskItem);
         }
-    } else {  // TODO(lumik): Bug? What about extended range?
+// batch experiments with extended range are not allowed
+    } else if (params->extRan.extendedRange) {
+        for (int ii = 0; ii < params->expe.size() - 1; ++ii) {
+            taskItem.task = new WinSpecTasks::ExpList(appState, false, ii, this);
+            taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
+            addTask(taskItem);
+
+            if (params->cal.at(ii).autoCal) {
+                TimeSpan timeSpan;
+                taskItem.task = new StartWaitingTask(appState, &timeSpan, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                addTask(taskItem);
+
+                taskItem.task = new StageTasks::GoToPosExpList(appState, StageControlTraits::PosType::Calibration, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
+                addTask(taskItem);
+
+                taskItem.task = new WinSpecTasks::ExpList(appState, true, ii, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
+                addTask(taskItem);
+
+                ForkJoinTask *fj = new ForkJoinTask(2, this);
+
+                taskItem.task = new StageTasks::GoToPosExpList(appState, StageControlTraits::PosType::Measurement, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StageControlGoToPosExpList;
+                fj->addTask(taskItem, 0);
+
+                taskItem.task = new GratingTasks::SendToPos(appState, true, 1, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::GratingSendToPos;
+                fj->addTask(taskItem, 1);
+
+                waitTaskItem.task = new GratingWaitTask(appState, appState);
+                waitTaskItem.waitFor = WaitTaskListTraits::WaitFor::Grating;
+                taskItem.task = new WaitExpTask(waitTaskItem, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::WaitExp;
+                fj->addTask(taskItem, 1);
+
+                taskItem.task = new WaitingTask(this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::Waiting;
+                fj->addTask(taskItem, 1);
+
+                taskItem.task = fj;
+                taskItem.taskType = ExpTaskListTraits::TaskType::ForkJoin;
+                addTask(taskItem);
+                // ForkJoinTask filling end
+
+                taskItem.task = new FinishWaitingTask(appState, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                addTask(taskItem);
+            } else {
+                TimeSpan timeSpan;
+                taskItem.task = new StartWaitingTask(appState, &timeSpan, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                addTask(taskItem);
+
+                taskItem.task = new GratingTasks::SendToPos(appState, true, 1, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::GratingSendToPos;
+                addTask(taskItem);
+
+                waitTaskItem.task = new GratingWaitTask(appState, appState);
+                waitTaskItem.waitFor = WaitTaskListTraits::WaitFor::Grating;
+                taskItem.task = new WaitExpTask(waitTaskItem, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::WaitExp;
+                addTask(taskItem);
+
+                taskItem.task = new WaitingTask(this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::Waiting;
+                addTask(taskItem);
+
+                taskItem.task = new FinishWaitingTask(appState, this);
+                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                addTask(taskItem);
+            }
+            taskItem.task = new WinSpecTasks::AddExpNumber(
+                        appState, 1, this);
+            taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecAddExpNumber;
+            addTask(taskItem);
+        }
+        // the last task may be without delay, so the last task is only
+        // spectrum measurement, see next taskItem.
+        taskItem.task = new WinSpecTasks::ExpList(appState, false, params->expe.size() - 1, this);
+        taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
+        addTask(taskItem);
+    } else {
         taskItem.task = new WinSpecTasks::ExpList(appState, false, 0, this);
         taskItem.taskType = ExpTaskListTraits::TaskType::WinSpecExpList;
         addTask(taskItem);
