@@ -1239,7 +1239,7 @@ void AppCore::buildBodyExpTasks(WaitTaskList *waitTaskList)
             waitTaskList->addTask(taskItem);
 
             taskItem.task = new FinishWaitingTask(appState_, this);
-            taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+            taskItem.taskType = ExpTaskListTraits::TaskType::FinishWaiting;
             waitTaskList->addTask(taskItem);
         }
     }

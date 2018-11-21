@@ -692,7 +692,7 @@ StageTasks::Initialize::Initialize(AppState *pappState, StageControlTraits::Init
     addTask(taskItem);
 
     taskItem.task = new FinishWaitingTask(pappState, this);
-    taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+    taskItem.taskType = ExpTaskListTraits::TaskType::FinishWaiting;
     addTask(taskItem);
 }
 
@@ -788,7 +788,7 @@ StageTasks::GoToLimWaitList::GoToLimWaitList(AppState *pappState, StageControlTr
     addTask(taskItem);
 
     taskItem.task = new FinishWaitingTask(pappState, this);
-    taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+    taskItem.taskType = ExpTaskListTraits::TaskType::FinishWaiting;
     addTask(taskItem);
 }
 
@@ -1126,7 +1126,7 @@ WholeExtExpList::WholeExtExpList(AppState *appState, QObject *parent) :
             // ForkJoinTask filling end
 
             taskItem.task = new FinishWaitingTask(appState, this);
-            taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+            taskItem.taskType = ExpTaskListTraits::TaskType::FinishWaiting;
             addTask(taskItem);
 
         } else {
@@ -1154,7 +1154,7 @@ WholeExtExpList::WholeExtExpList(AppState *appState, QObject *parent) :
             addTask(taskItem);
 
             taskItem.task = new FinishWaitingTask(appState, this);
-            taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+            taskItem.taskType = ExpTaskListTraits::TaskType::FinishWaiting;
             addTask(taskItem);
         }
         taskItem.task = new WinSpecTasks::AddExpNumber(
@@ -1733,7 +1733,7 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
                 // ForkJoinTask filling end
 
                 taskItem.task = new FinishWaitingTask(appState, this);
-                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                taskItem.taskType = ExpTaskListTraits::TaskType::FinishWaiting;
                 addTask(taskItem);
             } else {
                 TimeSpan timeSpan;
@@ -1756,7 +1756,7 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
                 addTask(taskItem);
 
                 taskItem.task = new FinishWaitingTask(appState, this);
-                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                taskItem.taskType = ExpTaskListTraits::TaskType::FinishWaiting;
                 addTask(taskItem);
             }
             taskItem.task = new WinSpecTasks::AddExpNumber(
@@ -2211,7 +2211,7 @@ WholeBatchExpList::WholeBatchExpList(AppState *appState, QObject *parent) :
                 // ForkJoinTask filling end
 
                 taskItem.task = new FinishWaitingTask(appState, this);
-                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                taskItem.taskType = ExpTaskListTraits::TaskType::FinishWaiting;
                 addTask(taskItem);
             } else {
                 TimeSpan timeSpan;
@@ -2234,7 +2234,7 @@ WholeBatchExpList::WholeBatchExpList(AppState *appState, QObject *parent) :
                 addTask(taskItem);
 
                 taskItem.task = new FinishWaitingTask(appState, this);
-                taskItem.taskType = ExpTaskListTraits::TaskType::StartWaiting;
+                taskItem.taskType = ExpTaskListTraits::TaskType::FinishWaiting;
                 addTask(taskItem);
             }
             taskItem.task = new WinSpecTasks::AddExpNumber(
