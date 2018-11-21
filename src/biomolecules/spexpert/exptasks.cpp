@@ -1701,7 +1701,7 @@ BatchExpList::BatchExpList(AppState *appState, QObject *parent) :
         } else {
             n = 1;
         }
-        if (params->tExp.loop) {
+        if (params->tExp.tExp && params->tExp.loop) {
             n = 2 * n;
         }
     } else {
