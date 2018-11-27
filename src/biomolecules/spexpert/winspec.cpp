@@ -1,5 +1,11 @@
 #include "winspec.h"
+
+#if defined(SPEXPERT_MOCK_WINSPEC)
+#include "mock_winspec.h"
+#else
 #include "winspecvb.h"
+#endif
+
 #include "lockableqvector.h"
 
 #include <QMutex>
@@ -7,10 +13,15 @@
 #include <algorithm> // to provide copy on containers
 
 WinSpec::WinSpec()
+    :
+#if defined(SPEXPERT_MOCK_WINSPEC)
+      winSpec{new biomolecules::spexpert::core::MockWinSpec}
+#else
+      winSpec{new WinSpecVB::WinSpecVB}
+#endif
 {
     qDebug() << "Vytvarim WinSpec...";
     mutex = new QMutex;
-    winSpec = new WinSpecVB::WinSpecVB;
 }
 
 bool WinSpec::start(double dblExpo_, int iAccums_, int iFrames_, const QString & strFileName_)
@@ -222,6 +233,5 @@ bool WinSpec::winSpecConnectionFailed()
 WinSpec::~WinSpec()
 {
     qDebug() << "Rusim WinSpec...";
-    delete winSpec;
     delete mutex;
 }

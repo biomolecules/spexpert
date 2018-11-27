@@ -1,6 +1,8 @@
 #ifndef WINSPEC_H
 #define WINSPEC_H
 
+#include <memory>
+
 #include <QVector>
 
 #include <QDebug>
@@ -9,10 +11,21 @@
 class QMutex;
 class LockableSpectrum;
 class LockableFrame;
+
+#if defined(SPEXPERT_MOCK_WINSPEC)
+namespace biomolecules {
+namespace spexpert {
+namespace core {
+class MockWinSpec;
+}
+}
+}
+#else
 namespace WinSpecVB
 {
     class WinSpecVB;
 }
+#endif
 //template<typename T>
 //class LockableQVector;
 
@@ -23,6 +36,8 @@ class WinSpec
 
 public:
     WinSpec();
+     WinSpec(const WinSpec&) = delete;
+     WinSpec& operator=(const WinSpec&) = delete;
 
     bool start(double dblExpo_, int iAccums_, int iFrames_, const QString & strFileName_);
     bool startFocus(double dblExpo_, int iAccums_, const QString & strFileName_);
@@ -52,13 +67,11 @@ public slots:
 
 private:
     QMutex *mutex;
-    WinSpecVB::WinSpecVB *winSpec;
-
-    // hides copy constructor
-     WinSpec(const WinSpec &) {}
-    // hides assignment operator
-     WinSpec & operator=(const WinSpec &) { return *this; }
-
+#if defined(SPEXPERT_MOCK_WINSPEC)
+    std::unique_ptr<biomolecules::spexpert::core::MockWinSpec> winSpec;
+#else
+    std::unique_ptr<WinSpecVB::WinSpecVB> winSpec;
+#endif
 };
 
 #endif // WINSPEC_H

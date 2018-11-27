@@ -5,9 +5,7 @@ set(${spexpert_project_name}_hdr
     lockableqvector.h
     relay.h
     timespan.h
-    usmcvb_com.h
-    winspec.h
-    winspecvb.h)
+    winspec.h)
 set(${spexpert_project_name}_tpp)
 set(${spexpert_project_name}_qt_hdr
     appcore.h
@@ -45,13 +43,24 @@ set(${spexpert_project_name}_src
     stagecontrol.cpp
     stagesetup.cpp
     timespan.cpp
-    usmcvb_com.cpp
     waittask.cpp
     waittasklist.cpp
     waittasks.cpp
-    winspec.cpp
-    winspecvb.cpp)
+    winspec.cpp)
 set(${spexpert_project_name}_ui)
+if (NOT omit_microsoft_com)
+    set(${spexpert_project_name}_hdr ${${spexpert_project_name}_hdr}
+        usmcvb_com.h
+        winspecvb.h)
+    set(${spexpert_project_name}_src ${${spexpert_project_name}_src}
+        usmcvb_com.cpp
+        winspecvb.cpp)
+else()
+    set(${spexpert_project_name}_hdr ${${spexpert_project_name}_hdr}
+        mock_winspec.h)
+    set(${spexpert_project_name}_src ${${spexpert_project_name}_src}
+        mock_winspec.cpp)
+endif()
 
 # create build file paths
 foreach(hdr ${${spexpert_project_name}_hdr})
@@ -82,6 +91,10 @@ if (MOCK_NESLAB_BATH)
     set(${spexpert_project_name}_moc_defines ${${spexpert_project_name}_moc_defines}
         -DSPEXPERT_MOCK_NESLAB_BATH)
 endif()
+if (MOCK_WINSPEC)
+    set(${spexpert_project_name}_moc_defines ${${spexpert_project_name}_moc_defines}
+        -DSPEXPERT_MOCK_WINSPEC)
+endif()
 if (${spexpert_project_name}_moc_defines)
     qt5_wrap_cpp(${spexpert_project_name}_hdr_moc_build ${${spexpert_project_name}_qt_hdr_build}
         OPTIONS ${${spexpert_project_name}_moc_defines})
@@ -98,7 +111,6 @@ add_executable(${spexpert_project_name}
     ${${spexpert_project_name}_hdr_moc_build}
     ${${spexpert_project_name}_ui_moc_build})
 target_link_libraries(${spexpert_project_name}
-    Qt5::AxContainer
     Qt5::Core
     Qt5::Gui
     Qt5::PrintSupport
@@ -106,6 +118,10 @@ target_link_libraries(${spexpert_project_name}
     Threads::Threads
     biomolecules::sprelay::sprelay_core
     biomolecules::sprelay::sprelay)
+if (NOT omit_microsoft_com)
+    target_link_libraries(${spexpert_project_name}
+        Qt5::AxContainer)
+endif()
 target_include_directories(${spexpert_project_name} PRIVATE
     ${spexpert_source_dir}/biomolecules/spexpert
     ${spexpert_source_dir}/external)
@@ -119,6 +135,9 @@ if (MOCK_CALIBRATION_STAGE)
 endif()
 if (MOCK_NESLAB_BATH)
     target_compile_definitions(${spexpert_project_name} PRIVATE SPEXPERT_MOCK_NESLAB_BATH)
+endif()
+if (MOCK_WINSPEC)
+    target_compile_definitions(${spexpert_project_name} PRIVATE SPEXPERT_MOCK_WINSPEC)
 endif()
 # add possible link flags
 if (spexpert_standalone_application_link_flags)
@@ -143,12 +162,17 @@ set(spexpert_translations
     ${spexpert_source_dir}/biomolecules/spexpert/languages/spexpert_cs.qm)
 
 # copy translations to binary dir
+if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set(${spexpert_project_name}_languages_dir ${CMAKE_BINARY_DIR}/languages)
+else()
+    set(${spexpert_project_name}_languages_dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/languages)
+endif()
 add_custom_target(copy_spexpert_translations ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/languages
+        ${${spexpert_project_name}_languages_dir}
     COMMAND ${CMAKE_COMMAND} -E copy
         ${spexpert_translations}
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/languages
+        ${${spexpert_project_name}_languages_dir}
     COMMENT "Copying translations...")
 
 install(

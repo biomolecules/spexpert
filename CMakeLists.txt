@@ -10,6 +10,10 @@ option(MOCK_NESLAB_BATH
     "Build the project with mock Neslab bath. Set it if you don't have or don't want to use real Neslab bath."
     OFF)
 
+option(MOCK_WINSPEC
+    "Build the project with mock Winspec. Set it if you don't have or don't want to use real WinSpec."
+    OFF)
+
 option(MAKE_ENUM_FLAGS
     "Forces internal enum_flags library usage. Otherwise the library is searched if sytem path. You can also specify
     its location by enum_flags_ROOT_DIR cache variable."
@@ -35,6 +39,9 @@ set(spexpert_project_name spexpert)
 set(spexpert_root_binary_dir ${CMAKE_BINARY_DIR})
 set(spexpert_root_source_dir ${PROJECT_SOURCE_DIR})
 set(spexpert_install_doc_dir "${CMAKE_INSTALL_DATAROOTDIR}/doc/${spexpert_project_name}")
+if (MOCK_CALIBRATION_STAGE AND MOCK_WINSPEC)
+    set(omit_microsoft_com TRUE)
+endif()
 
 # object files with dependencies works well only for cmake version 3.12 or later else the object files do not propagate
 # dependencies and cant use target_link_libraries
@@ -62,7 +69,11 @@ if (MINGW)
 endif()
 
 # Add Qt
-find_package(Qt5 COMPONENTS Core Gui Widgets SerialPort PrintSupport AxContainer REQUIRED)
+if (omit_microsoft_com)
+    find_package(Qt5 COMPONENTS Core Gui Widgets SerialPort PrintSupport REQUIRED)
+else()
+    find_package(Qt5 COMPONENTS Core Gui Widgets SerialPort PrintSupport AxContainer REQUIRED)
+endif()
 
 # Add threading
 find_package(Threads REQUIRED)

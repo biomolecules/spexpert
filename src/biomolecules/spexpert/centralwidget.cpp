@@ -3,7 +3,6 @@
 
 #include <QPushButton>
 #include <QLayout>
-#include <QAxBase>
 #include "plotproxy.h"
 
 CentralWidget::CentralWidget(QWidget *parent) :
